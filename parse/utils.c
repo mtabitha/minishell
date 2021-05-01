@@ -14,7 +14,7 @@
 
 void		free_null(char **ptr)
 {
-	if (*ptr != NULL)
+	if (ptr && *ptr != NULL)
 	{
 		free(*ptr);
 		*ptr = NULL;

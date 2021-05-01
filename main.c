@@ -23,7 +23,7 @@ int			main(int argc, char *argv[], char **env)
 	while (shell.exit == 0)
 	{
 		parse(&shell);
-
+			
 	}
 	return (0);
 }

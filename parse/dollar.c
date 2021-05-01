@@ -17,7 +17,7 @@ int			count_dollar(char *str, int i, int type)
 	int		count;
 
 	count = 0;
-	while (!type && str[i] && str[i] != -36 && (i++))
+	while (!type && str[i] && str[i] != -36)
 	{
 		count++;
 		i++;
@@ -62,7 +62,7 @@ char		*parse_dollar(char *str, t_env *env)
 			{
 				type = (char *)malloc(sizeof(char) * (count_dollar(str, ++i, 1) + 1));
 				set_str_dollar(str, &i, type, 1);
-				line = get_env_val(get_env(type, env));
+				line = ft_strdup(get_env_val(get_env(type, env)));
 			}
 		else
 		{

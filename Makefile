@@ -2,11 +2,11 @@
 
 PARS_P = ./parse/
 
-PARS_SRCS = dollar.c \
-			env.c	 \
-			parse.c	 \
-			set_units.c \
-			shlvl.c \
+PARS_SRCS = dollar.c	 \
+			env.c		 \
+			parse.c		 \
+			set_units.c  \
+			shlvl.c 	 \
 			space_line.c \
 			utils.c 
 
@@ -17,19 +17,17 @@ NAME = minishell.a
 CC = gcc
 CFLAGS = -g -I$(INC)
 
-OBJS = $(PARS_SRCS:.c=.o) 
-
-all : make_libft $(NAME)
-	
-make_libft :
-	make -C ./libft
+OBJS = $(PARS_OBJS:.c=.o) 
+PARS_OBJS =	$(addprefix $(PARS_P), $(PARS_SRCS))
+all : $(NAME)
 
 $(NAME) : $(OBJS) 
+		make -C ./libft
 		mv $(LIBFT_A) $(NAME)
 		ar rcs $(NAME) $(OBJS)
 		$(CC) -g main.c $(NAME) -o minishell
 
-./%.o: $(PARS_P)%.c $(INC)
+%.o: %.c $(INC)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean : 

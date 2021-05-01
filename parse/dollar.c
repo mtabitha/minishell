@@ -56,17 +56,20 @@ char		*parse_dollar(char *str, t_env *env)
 	while (str[i])
 	{
 		if (str[i] == -36)
-		{
-			type = (char *)malloc(sizeof(char) * (count_dollar(str, ++i, 1) + 1));
-			set_str_dollar(str, &i, type, 1);
-			new_str = ft_strjoin_for_gnl(new_str, get_env_val(get_env(type, env)));
-		}
+			if (str[i + 1] == '?' && (i += 2))
+				line = ft_itoa(ret_last_proc);
+			else 
+			{
+				type = (char *)malloc(sizeof(char) * (count_dollar(str, ++i, 1) + 1));
+				set_str_dollar(str, &i, type, 1);
+				line = get_env_val(get_env(type, env));
+			}
 		else
 		{
 			line = (char *)malloc(sizeof(char) * (count_dollar(str, i, 0) + 1));
 			set_str_dollar(str, &i, line, 0);
-			new_str = ft_strjoin_for_gnl(new_str, line);
 		}
+		new_str = ft_strjoin_for_gnl(new_str, line);
 		free_null(&line);
 		free_null(&type);
 	}

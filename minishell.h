@@ -30,6 +30,7 @@
 # define PYPE 6
 # define END  7
 
+int 			ret_last_proc;
 
 typedef struct		s_env
 {

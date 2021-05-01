@@ -27,7 +27,7 @@ make_libft :
 $(NAME) : $(OBJS) 
 		mv $(LIBFT_A) $(NAME)
 		ar rcs $(NAME) $(OBJS)
-		$(CC) main.c $(NAME) -o minishell
+		$(CC) -g main.c $(NAME) -o minishell
 
 ./%.o: $(PARS_P)%.c $(INC)
 	$(CC) $(CFLAGS) -c $< -o $@

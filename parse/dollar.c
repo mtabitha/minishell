@@ -42,6 +42,17 @@ void		set_str_dollar(char *str, int *i, char *line, int type)
 	line[j] = 0;
 }
 
+char		*malloc_dollar(char *str, int *i, int type)
+{
+	char	*ptr;
+	
+	if (type)
+		(*i)++;
+	ptr = (char *)malloc(sizeof(char) * (count_dollar(str, *i, type) + 1));
+	set_str_dollar(str, i, ptr, type);
+	return(ptr);
+}
+
 char		*parse_dollar(char *str, t_env *env)
 {
 	char	*new_str;
@@ -60,15 +71,11 @@ char		*parse_dollar(char *str, t_env *env)
 				line = ft_itoa(ret_last_proc);
 			else 
 			{
-				type = (char *)malloc(sizeof(char) * (count_dollar(str, ++i, 1) + 1));
-				set_str_dollar(str, &i, type, 1);
+				type = malloc_dollar(str, &i, 1);
 				line = ft_strdup(get_env_val(get_env(type, env)));
 			}
 		else
-		{
-			line = (char *)malloc(sizeof(char) * (count_dollar(str, i, 0) + 1));
-			set_str_dollar(str, &i, line, 0);
-		}
+			line = malloc_dollar(str, &i, 0);
 		new_str = ft_strjoin_for_gnl(new_str, line);
 		free_null(&line);
 		free_null(&type);

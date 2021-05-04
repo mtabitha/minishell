@@ -45,9 +45,12 @@ int		quote_err(char *line)
 	return (0);
 }
 
+
+
 void		parse(t_shell *shell)
 {
 	char 	*line;
+	char	**command;
 
 	ft_putstr_fd("minishell > ", 1);
 	get_next_line(0, &line);
@@ -55,12 +58,16 @@ void		parse(t_shell *shell)
 		return ;
 	line = space_line(line);
 	shell->first = set_units(line, shell->env);
+	dollar(shell->first, shell);
 	free(line);
-
+	if (!check_valid(shell->first))
+		shell->first = free_units(shell->first);
 
 	while (shell->first)
 	{
 		ft_putstr_fd(shell->first->str, 1);
+		ft_putstr_fd(" ", 1);
+		ft_putstr_fd(ft_itoa(shell->first->type), 1);
 		shell->first = shell->first->next;
 		ft_putstr_fd(" ", 1);
 	}

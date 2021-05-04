@@ -8,7 +8,8 @@ PARS_SRCS = dollar.c	 \
 			set_units.c  \
 			shlvl.c 	 \
 			space_line.c \
-			utils.c 
+			utils.c 	 \
+			check_valid.c
 
 INC = ./minishell.h
 LIBFT_A = $(LIBFT_P)libft.a

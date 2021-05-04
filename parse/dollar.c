@@ -60,7 +60,7 @@ char		*env_dollar(char *str, int *i, t_env *env)
 	return (line);
 }
 
-char		*parse_dollar(char *str, t_env *env)
+char		*parse_dollar(char *str, t_shell *shell)
 {
 	char	*new_str;
 	char 	*line;
@@ -73,9 +73,9 @@ char		*parse_dollar(char *str, t_env *env)
 	{
 		if (str[i] == -36)
 			if (str[i + 1] == '?' && (i += 2))
-				line = ft_itoa(ret_last_proc);
+				line = ft_itoa(shell->ret);
 			else 
-				line = env_dollar(str, &i, env);
+				line = env_dollar(str, &i, shell->env);
 		else
 			line = set_dollar(str, &i, 0);
 		new_str = ft_strjoin_for_gnl(new_str, line);
@@ -83,4 +83,15 @@ char		*parse_dollar(char *str, t_env *env)
 	}
 	free(str);
 	return (new_str);
+}
+
+void		dollar(t_unit *unit, t_shell *shell)
+{
+	while (unit)
+	{
+		if (ft_strchr(unit->str, (char)(-36)))
+			unit->str = parse_dollar(unit->str, shell);
+		set_unit_type(unit);
+		unit = unit->next;
+	}
 }

@@ -24,13 +24,11 @@
 # define ETY  0
 # define CMD  1
 # define ARG  2
-# define RED1 3
-# define RED2 4
+# define TRUNK 3
+# define APPEND 4
 # define IN   5
-# define PYPE 6
+# define PIPE 6
 # define END  7
-
-int 			ret_last_proc;
 
 typedef struct		s_env
 {
@@ -49,6 +47,9 @@ typedef struct		s_unit
 
 typedef struct		s_shell
 {
+	int				ret;
+	int				in;
+	int				out;
 	t_env			*env;
 	t_unit			*first;
 	int				exit;
@@ -62,12 +63,12 @@ void		set_shlvl(t_env *env);
 void		parse(t_shell *shell);
 
 char		*space_line(char *line);
-
+void		set_unit_type(t_unit *unit);
 t_unit		*set_units(char *line, t_env *env);
-char		*parse_dollar(char *str, t_env *env);
+void		dollar(t_unit *unit, t_shell *shell);
 int			in_quote(char *str, int	pos);
-
-
+int			check_valid(t_unit *first);
+t_unit		*free_units(t_unit *unit);
 
 int			change_quote(char ch, char *quote);
 void		space_skip(char *line, int *i);

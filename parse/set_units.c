@@ -67,8 +67,6 @@ t_unit		*new_unit_str(char *line, int *i, t_env *env)
 				(count_new_unit_str(line, *i) + 1))))
 		return (NULL);
 	parse_new_unit_str(line, new_str, i);
-	if (ft_strchr(new_str, (char)(-36)))
-		new_str = parse_dollar(new_str, env);
 	new->str = ft_strdup(new_str);
 	free(new_str);
 	return (new);
@@ -78,17 +76,17 @@ void		set_unit_type(t_unit *unit)
 {
 	if (!ft_strncmp("", unit->str, 1))
 		unit->type = ETY;
-	else if (!ft_strncmp(">", unit->str, 1))
-		unit->type = RED1;
-	else if (!ft_strncmp(">>", unit->str, 2))
-		unit->type = RED2;
-	else if (!ft_strncmp("<", unit->str, 1))
+	else if (!ft_strncmp(">", unit->str, 2))
+		unit->type = TRUNK;
+	else if (!ft_strncmp(">>", unit->str, 3))
+		unit->type = APPEND;
+	else if (!ft_strncmp("<", unit->str, 2))
 		unit->type = IN;
-	else if (!ft_strncmp("|", unit->str, 1))
-		unit->type = PYPE;
-	else if (!ft_strncmp(";", unit->str, 1))
+	else if (!ft_strncmp("|", unit->str, 2))
+		unit->type = PIPE;
+	else if (!ft_strncmp(";", unit->str, 2))
 		unit->type = END;
-	else if (unit->prev == NULL || unit->prev->type >= PYPE)
+	else if (unit->prev == NULL || unit->prev->type >= PIPE)
 		unit->type = CMD;
 	else
 		unit->type = ARG;	
@@ -112,7 +110,6 @@ t_unit		*set_units(char *line, t_env *env)
 		if (unit)
 			unit->next = next;
 		unit = next;
-		set_unit_type(unit);
 		space_skip(line, &i);
 	}
 	while (next && next->prev)

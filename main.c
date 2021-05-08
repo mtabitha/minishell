@@ -54,6 +54,7 @@ int			main(int argc, char *argv[], char **env)
 	shell.ret = 0;
 	set_envs(&shell.env, env);
 	set_shlvl(shell.env);
+	init_termcap(&shell.tmp);	
 	while (shell.exit == 0)
 	{
 		parse(&shell);

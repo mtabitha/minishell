@@ -1,25 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mtabitha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/29 08:49:22 by mtabitha          #+#    #+#             */
-/*   Updated: 2021/01/07 15:25:00 by mtabitha         ###   ########.fr       */
+/*   Created: 2021/05/08 14:55:23 by mtabitha          #+#    #+#             */
+/*   Updated: 2021/05/08 14:55:25 by mtabitha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	ft_strlen(const char *s)
+int     ft_strcmp(char *str1, char *str2)
 {
-	size_t i;
+    int i;
+    int cnt;
 
-	i = 0;
-	if (!s || s == NULL)
-		return (0);
-	while (s[i])
-		i++;
-	return (i);
+    i = 0;
+    cnt = 0;
+    if (!str1 || !str2)
+        return (1);
+    while (str1[i] && str2[i])
+    {
+        cnt = str1[i] - str2[i];
+        if (cnt != 0)
+            return (cnt);
+        i++;
+    }
+    return (str1[i] - str2[i]);
 }

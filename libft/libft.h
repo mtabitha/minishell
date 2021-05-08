@@ -31,5 +31,7 @@ char				*ft_strchr(const char *s, int c);
 int					ft_isalpha(int c);
 int					ft_isdigit(int c);
 char				**ft_split_str(char const *s, const char *del);
-char			    *ft_strjoin_for_gnl(char *s1, char *s2);                
+char			    *ft_strjoin_for_gnl(char *s1, char *s2); 
+int		            ft_putchar(int c);
+int                 ft_strcmp(char *str1, char *str2);              
 #endif

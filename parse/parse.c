@@ -40,12 +40,11 @@ int		quote_err(char *line)
 	if (in_quote(line, ft_strlen(line)))
 	{
 		ft_putstr_fd("minishell: Error: quote\n", 1);
+		free(line);
 		return (1);
 	}
 	return (0);
 }
-
-
 
 void		parse(t_shell *shell)
 {
@@ -53,7 +52,9 @@ void		parse(t_shell *shell)
 	char	**command;
 
 	ft_putstr_fd("minishell > ", 1);
-	get_next_line(0, &line);
+	set_flag(&shell->tmp, &shell->term);
+	line = ft_strdup(termcap(&shell->tmp));
+	reset_flag(&shell->term);
 	if (quote_err(line))
 		return ;
 	line = space_line(line);
@@ -62,7 +63,7 @@ void		parse(t_shell *shell)
 	free(line);
 	if (!check_valid(shell->first))
 		shell->first = free_units(shell->first);
-
+	write(1, "\n", 1);
 	while (shell->first)
 	{
 		ft_putstr_fd(shell->first->str, 1);
@@ -71,5 +72,6 @@ void		parse(t_shell *shell)
 		shell->first = shell->first->next;
 		ft_putstr_fd(" ", 1);
 	}
-	ft_putstr_fd("\n", 1);
+	write(1, "\n", 1);
+	tputs(save_cursor, 1, ft_putchar);
 }

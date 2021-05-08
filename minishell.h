@@ -20,6 +20,8 @@
 # include <sys/wait.h>
 # include <signal.h>
 # include "libft/libft.h"
+# include <termios.h>
+# include <term.h>
 
 # define ETY  0
 # define CMD  1
@@ -29,6 +31,13 @@
 # define IN   5
 # define PIPE 6
 # define END  7
+
+# define UP 	"\x1b[A"
+# define DOWN 	"\x1b[B"
+# define LEFT 	"\x1b[D"
+# define RIGHT 	"\x1b[C"
+# define BACK 	"\x7f"
+# define ENTER	"\n"
 
 typedef struct		s_env
 {
@@ -44,6 +53,25 @@ typedef struct		s_unit
 	char			*str;
 }					t_unit;
 
+typedef struct	s_list
+{
+	struct s_list	*prev;
+	struct s_list	*next;
+	char			*content;
+}				t_list;
+
+typedef struct 	s_termcap
+{
+	int			pos;
+	int			max;
+	char 		buf[100];
+	int			buf_len;
+	int			in_hist;
+	int			count_hist;
+	t_list		*new;
+	t_list		*first;
+	t_list		*history;
+}				t_termcap;
 
 typedef struct		s_shell
 {
@@ -53,6 +81,8 @@ typedef struct		s_shell
 	t_env			*env;
 	t_unit			*first;
 	int				exit;
+	t_termcap 		tmp;
+	struct termios 	term;
 }					t_shell;
 
 char		*get_env_val(t_env *env);
@@ -75,5 +105,21 @@ void		space_skip(char *line, int *i);
 void		free_null(char **ptr);
 void		ft_free(char **ptr);
 int			count_el(char **ptr);
+
+char	*termcap(t_termcap *tmp);
+void	set_flag(t_termcap *tmp, struct termios *term);
+void	reset_flag(struct termios *term);
+void	init_termcap(t_termcap *tmp);
+
+void	button_up(t_termcap *tmp);
+void	button_down(t_termcap *tmp);
+void	button_right(t_termcap *tmp);
+void	button_left(t_termcap *tmp);
+void	button_enter(t_termcap *tmp);
+void	button_back(t_termcap *tmp);
+void	button_insert(t_termcap *tmp);
+void	button_read(t_termcap *tmp);
+void	delete_ch(char **buf, int pos);
+void	add_ch(char **buf, int pos, char *str);
 
 #endif

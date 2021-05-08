@@ -15,7 +15,10 @@ SRC_S = ./ft_memset.c \
 			./ft_putstr_fd.c \
 			./ft_strchr.c \
 			./get_next_line.c \
-			./ft_split_str.c
+			./ft_split_str.c \
+			./ft_putchar.c \
+			./ft_strcmp.c
+			
 NAME = libft.a
 CC = gcc
 CFLAGS = -g -Wall -Wextra -Werror -I$(INC)

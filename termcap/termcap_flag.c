@@ -23,6 +23,8 @@ void	set_flag(t_termcap *tmp, struct termios *term)
     tcsetattr(0, TCSANOW, term);
     tgetent(0, term_name);
 	tputs(save_cursor, 1, ft_putchar);
+	tmp->pos = 0;
+	tmp->max = 0;
 	tmp->new = (t_list *)malloc(sizeof(t_list));
 	tmp->new->content = ft_strdup("");
 }

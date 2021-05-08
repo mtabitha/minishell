@@ -115,7 +115,7 @@ void	button_up(t_termcap *tmp);
 void	button_down(t_termcap *tmp);
 void	button_right(t_termcap *tmp);
 void	button_left(t_termcap *tmp);
-void	button_enter(t_termcap *tmp);
+char	*button_enter(t_termcap *tmp);
 void	button_back(t_termcap *tmp);
 void	button_insert(t_termcap *tmp);
 void	button_read(t_termcap *tmp);

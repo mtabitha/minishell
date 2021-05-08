@@ -12,10 +12,14 @@
 
 #include "../minishell.h"
 
-void	delete_last_hist(t_list *list)
+void	delete_last_hist(t_termcap *tmp)
 {
 	t_list	*ptr;
+	t_list	*list;
 
+	if (tmp->count_hist < 15)
+		return ;
+	list = tmp->first;
 	while(list && list->next)
 		list = list->next;
 	if (list->prev)
@@ -26,7 +30,7 @@ void	delete_last_hist(t_list *list)
 	free(list);
 }
 
-void	button_enter(t_termcap *tmp)
+char	*button_enter(t_termcap *tmp)
 {
 	if (ft_strcmp(tmp->new->content, "") || tmp->in_hist == 1)
 	{
@@ -44,11 +48,10 @@ void	button_enter(t_termcap *tmp)
 		tmp->new = (t_list *)malloc(sizeof(t_list));
 		tmp->new->content = ft_strdup("");
 		tmp->count_hist++;
-		if (tmp->count_hist > 15)
-			delete_last_hist(tmp->first);
+		delete_last_hist(tmp);
+		return (tmp->first->content);
 	}
-	tmp->pos = 0;
-	tmp->max = 0;
+	return (tmp->new->content);
 	write(1, ENTER, 1);
 }
 

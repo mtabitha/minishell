@@ -47,10 +47,7 @@ char	*termcap(t_termcap *tmp)
     {
 		button_read(tmp);
         if (!ft_strcmp(tmp->buf, ENTER))
-		{
-			button_enter(tmp);
-			break ;
-		}
+			return (button_enter(tmp));
         else if (!ft_strcmp(tmp->buf, UP))
 			button_up(tmp);
 		else if (!ft_strcmp(tmp->buf, DOWN))
@@ -61,7 +58,7 @@ char	*termcap(t_termcap *tmp)
 			button_left(tmp);
 		else if (!ft_strcmp(tmp->buf, BACK))
 			button_back(tmp);
-	    else
+	    else 
 			button_insert(tmp);
     }
 	return (tmp->first->content);

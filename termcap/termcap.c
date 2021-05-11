@@ -12,6 +12,12 @@
 
 #include "../minishell.h"
 
+void	clean_buf(char *buf)
+{
+	while (buf && *buf)
+		*buf++ = 0;
+}
+
 void	delete_ch(char **buf, int pos)
 {
 	int len;
@@ -41,6 +47,17 @@ void	add_ch(char **buf, int pos, char *str)
 	*buf = ptr;
 }
 
+void	button_eof(t_termcap *tmp)
+{
+	if (*(tmp->new->content) == 0)
+	{
+		write(1, "exit\n", 5);
+		exit(0);
+	}
+	else
+		write(1,"\a",1);
+}
+
 char	*termcap(t_termcap *tmp)
 {
 	while (1)
@@ -58,6 +75,8 @@ char	*termcap(t_termcap *tmp)
 			button_left(tmp);
 		else if (!ft_strcmp(tmp->buf, BACK))
 			button_back(tmp);
+		else if (!ft_strcmp(tmp->buf, END_L))
+			button_eof(tmp);
 	    else 
 			button_insert(tmp);
     }

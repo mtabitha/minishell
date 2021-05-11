@@ -36,6 +36,7 @@ char	*button_enter(t_termcap *tmp)
 	{
 		if (tmp->in_hist == 1)
 		{
+			tmp->in_hist = 0;
 			free(tmp->new->content);
 			tmp->new->content = ft_strdup(tmp->history->content);
 		}
@@ -52,7 +53,6 @@ char	*button_enter(t_termcap *tmp)
 		return (tmp->first->content);
 	}
 	return (tmp->new->content);
-	write(1, ENTER, 1);
 }
 
 void	button_back(t_termcap *tmp)
@@ -94,7 +94,14 @@ void	button_read(t_termcap *tmp)
 	int	i;
 
 	i = 0;
-	while (i < 4)
-		tmp->buf[i++] = 0;
+	clean_buf(tmp->buf);
 	tmp->buf_len = read(0, tmp->buf, 100);
+	if (sig.flag)
+	{
+		clean_buf(tmp->new->content);
+		sig.flag = 0;
+		tmp->pos = 0;
+		tmp->history = NULL;
+		tmp->in_hist = 0;
+	}
 }

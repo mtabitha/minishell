@@ -22,6 +22,7 @@
 # include "libft/libft.h"
 # include <termios.h>
 # include <term.h>
+# include <signal.h>
 
 # define ETY  0
 # define CMD  1
@@ -38,6 +39,7 @@
 # define RIGHT 	"\x1b[C"
 # define BACK 	"\x7f"
 # define ENTER	"\n"
+# define END_L	"\x04"
 
 typedef struct		s_env
 {
@@ -85,6 +87,15 @@ typedef struct		s_shell
 	struct termios 	term;
 }					t_shell;
 
+typedef struct		s_sig
+{
+	pid_t			pid;
+	int				flag;
+	int				exit;
+}					t_sig;
+
+t_sig		sig;
+
 char		*get_env_val(t_env *env);
 t_env		*get_env(char *type, t_env *env);
 void		set_envs(t_env **mini_env, char **bash_env);
@@ -121,5 +132,10 @@ void	button_insert(t_termcap *tmp);
 void	button_read(t_termcap *tmp);
 void	delete_ch(char **buf, int pos);
 void	add_ch(char **buf, int pos, char *str);
+
+void		handle_sigquit(int ret);
+void		handle_sigint(int ret);
+void		init_sig(void);
+void	clean_buf(char *buf);
 
 #endif

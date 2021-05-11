@@ -40,8 +40,6 @@ int			this_types(char *tmp, t_unit *unit)
 	return (0);
 }
 
-
-
 int			main(int argc, char *argv[], char **env)
 {
 	(void)argc;
@@ -50,13 +48,16 @@ int			main(int argc, char *argv[], char **env)
 	shell.in = dup(0);
 	shell.out = dup(1);
 
+	signal(SIGINT, handle_sigint);
+	signal(SIGQUIT, handle_sigquit);
 	shell.exit = 0;
 	shell.ret = 0;
 	set_envs(&shell.env, env);
 	set_shlvl(shell.env);
-	init_termcap(&shell.tmp);	
+	init_termcap(&shell.tmp);
 	while (shell.exit == 0)
 	{
+		init_sig();
 		parse(&shell);
 		//if (shell.first != NULL && valid_units(&shell))
 		//	;

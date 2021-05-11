@@ -49,7 +49,6 @@ int		quote_err(char *line)
 void		parse(t_shell *shell)
 {
 	char 	*line;
-	char	**command;
 
 	ft_putstr_fd("minishell > ", 1);
 	set_flag(&shell->tmp, &shell->term);
@@ -63,7 +62,8 @@ void		parse(t_shell *shell)
 	free(line);
 	if (!check_valid(shell->first))
 		shell->first = free_units(shell->first);
-	write(1, "\n", 1);
+	if (shell->first)
+	{write(1, "\n", 1);
 	while (shell->first)
 	{
 		ft_putstr_fd(shell->first->str, 1);
@@ -72,6 +72,6 @@ void		parse(t_shell *shell)
 		shell->first = shell->first->next;
 		ft_putstr_fd(" ", 1);
 	}
+	}
 	write(1, "\n", 1);
-	tputs(save_cursor, 1, ft_putchar);
 }

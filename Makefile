@@ -14,7 +14,8 @@ PARS_SRCS = dollar.c	 \
 TERM_SRCS = button_arrow.c \
 			button_spec.c \
 			termcap.c \
-			termcap_flag.c
+			termcap_flag.c \
+			signals.c
 
 INC = ./minishell.h
 LIBFT_A = $(LIBFT_P)libft.a
@@ -29,7 +30,7 @@ PARS_OBJS =	$(addprefix $(PARS_P), $(PARS_SRCS))
 TERM_OBJS =	$(addprefix $(TERM_P), $(TERM_SRCS))
 all : $(NAME)
 
-$(NAME) : $(OBJS) 
+$(NAME) : $(OBJS) main.c
 		make -C ./libft
 		mv $(LIBFT_A) $(NAME)
 		ar rcs $(NAME) $(OBJS)

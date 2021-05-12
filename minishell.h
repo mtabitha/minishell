@@ -27,11 +27,12 @@
 # define ETY  0
 # define CMD  1
 # define ARG  2
-# define TRUNK 3
-# define APPEND 4
-# define IN   5
-# define PIPE 6
-# define END  7
+# define FILE 3
+# define TRUNK 4
+# define APPEND 5
+# define IN   6
+# define PIPE 7
+# define END  8
 
 # define UP 	"\x1b[A"
 # define DOWN 	"\x1b[B"
@@ -77,6 +78,8 @@ typedef struct 	s_termcap
 
 typedef struct		s_shell
 {
+	int				fdout;
+	int				fdin;
 	int				ret;
 	int				in;
 	int				out;
@@ -101,7 +104,7 @@ t_env		*get_env(char *type, t_env *env);
 void		set_envs(t_env **mini_env, char **bash_env);
 void		set_shlvl(t_env *env);
 
-void		parse(t_shell *shell);
+t_unit		*parse(t_shell *shell);
 
 char		*space_line(char *line);
 void		set_unit_type(t_unit *unit);

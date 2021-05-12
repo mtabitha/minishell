@@ -46,32 +46,40 @@ int		quote_err(char *line)
 	return (0);
 }
 
-void		parse(t_shell *shell)
+t_unit		*parse(t_shell *shell)
 {
 	char 	*line;
 
+	line = NULL;
 	ft_putstr_fd("minishell > ", 1);
 	set_flag(&shell->tmp, &shell->term);
 	line = ft_strdup(termcap(&shell->tmp));
 	reset_flag(&shell->term);
-	if (quote_err(line))
-		return ;
+	if (quote_err(line) || !line)
+		return (NULL);
 	line = space_line(line);
 	shell->first = set_units(line, shell->env);
 	dollar(shell->first, shell);
 	free(line);
 	if (!check_valid(shell->first))
 		shell->first = free_units(shell->first);
-	if (shell->first)
-	{write(1, "\n", 1);
-	while (shell->first)
-	{
-		ft_putstr_fd(shell->first->str, 1);
-		ft_putstr_fd(" ", 1);
-		ft_putstr_fd(ft_itoa(shell->first->type), 1);
-		shell->first = shell->first->next;
-		ft_putstr_fd(" ", 1);
-	}
-	}
-	write(1, "\n", 1);
+	t_unit *start;
+	start = shell->first;
+	//if (start)
+	//{
+	//while (start)
+	//{
+	//	ft_putstr_fd(start->str, 1);
+	//	ft_putstr_fd(" ", 1);
+	//	ft_putstr_fd(ft_itoa(start->type), 1);
+	//	start = start->next;
+	//	ft_putstr_fd(" ", 1);
+	//}
+	//}
+	//write(1, "\n", 1);
+
+	return (shell->first);
+
+
+
 }

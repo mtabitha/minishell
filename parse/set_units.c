@@ -88,6 +88,8 @@ void		set_unit_type(t_unit *unit)
 		unit->type = END;
 	else if (unit->prev == NULL || unit->prev->type >= PIPE)
 		unit->type = CMD;
+	else if (unit->prev->type >= TRUNK && unit->prev->type <= IN)
+		unit->type = FILE;
 	else
 		unit->type = ARG;	
 }

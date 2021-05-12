@@ -28,7 +28,7 @@ int		type_error(t_unit *unit)
 
 int			no_valid_unit(t_unit *unit)
 {
-	if (unit->next == NULL || (unit->next && unit->next->type != ARG))
+	if (unit->next == NULL || (unit->next && unit->next->type != FILE))
 	{
 		if (unit->type == TRUNK)
 			return (type_error(unit->next));
@@ -37,7 +37,7 @@ int			no_valid_unit(t_unit *unit)
 		else if (unit->type == IN)
 			return (type_error(unit->next));
 	}
-	if (unit->prev == NULL || (unit->prev && unit->prev->type > ARG))
+	if (unit->prev == NULL || (unit->prev && unit->prev->type > FILE))
 	{
 		if (unit->type == PIPE)
 			return (type_error(unit));

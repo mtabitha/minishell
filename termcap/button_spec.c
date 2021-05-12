@@ -30,29 +30,39 @@ void	delete_last_hist(t_termcap *tmp)
 	free(list);
 }
 
+int		empty_line(char *line)
+{
+	while (line && *line)
+		if (*line != ' ' || *line != '\t')
+			return (0);
+		else
+			line++;
+	return (1);
+}
+
 char	*button_enter(t_termcap *tmp)
 {
-	if (ft_strcmp(tmp->new->content, "") || tmp->in_hist == 1)
+	write(1, "\n", 1);
+	if (empty_line(tmp->new->content) && !tmp->in_hist )
 	{
-		if (tmp->in_hist == 1)
-		{
-			tmp->in_hist = 0;
-			free(tmp->new->content);
-			tmp->new->content = ft_strdup(tmp->history->content);
-		}
-		tmp->new->next = tmp->first;
-		if (tmp->first)
-			tmp->first->prev = tmp->new;
-		tmp->new->prev = NULL;
-		tmp->first = tmp->new;
-		tmp->history = tmp->first;
-		tmp->new = (t_list *)malloc(sizeof(t_list));
-		tmp->new->content = ft_strdup("");
-		tmp->count_hist++;
-		delete_last_hist(tmp);
-		return (tmp->first->content);
+		free(tmp->new->content);
+		return (NULL);
 	}
-	return (tmp->new->content);
+	if (tmp->in_hist == 1)
+	{
+		tmp->in_hist = 0;
+		free(tmp->new->content);
+		tmp->new->content = ft_strdup(tmp->history->content);
+	}
+	tmp->new->next = tmp->first;
+	if (tmp->first)
+		tmp->first->prev = tmp->new;
+	tmp->new->prev = NULL;
+	tmp->first = tmp->new;
+	tmp->history = tmp->first;
+	tmp->count_hist++;
+	delete_last_hist(tmp);
+	return (tmp->first->content);
 }
 
 void	button_back(t_termcap *tmp)

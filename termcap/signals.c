@@ -17,11 +17,10 @@ void		handle_sigquit(int ret)
 	char	*str;
 
 	str = ft_itoa(ret);
-	if (sig.pid)
+	if (sig.pid != -1)
 	{
-		sig.flag = 1;
-		write(1, "\n", 1);
-		ft_putstr_fd("^\\Quit: ", 2);
+		sig.ch_flagquit = 1;
+		ft_putstr_fd("Quit: ", 1);
 		ft_putstr_fd(str, 1);
 		write(1, "\n", 1);
 		sig.exit = 131;
@@ -31,23 +30,28 @@ void		handle_sigquit(int ret)
 
 void		handle_sigint(int ret)
 {
-	sig.flag = 1;
-	if (sig.pid)
+	if (sig.pid != -1)
 	{
+		sig.ch_flagint = 1;
 		write(1, "\n", 1);
-		ft_putstr_fd("^C", 1);
 		sig.exit = 130;
 	}
 	else
+	{
+		sig.flagint = 1;
 		sig.exit = 1;
-	write(1, "\n", 1);
-	ft_putstr_fd("minishell > ", 2);
-	tputs(delete_character, 1, ft_putchar);
+		write(1, "\n", 1);
+		ft_putstr_fd("minishell > ", 2);
+		tputs(delete_character, 1, ft_putchar);
+	}
 }
 
 void		init_sig(void)
 {
 	sig.exit = 0;
-	sig.pid = 0;
+	sig.pid = -1;
+	sig.flagint = 0;
 	sig.flag = 0;
+	sig.ch_flagquit = 0;
+	sig.ch_flagint = 0;
 }

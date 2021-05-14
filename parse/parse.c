@@ -55,6 +55,8 @@ t_unit		*parse(t_shell *shell)
 	set_flag(&shell->tmp, &shell->term);
 	line = ft_strdup(termcap(&shell->tmp));
 	reset_flag(&shell->term);
+	if (sig.flagint)
+		shell->last_ret = sig.exit;
 	if (quote_err(line) || !line)
 		return (NULL);
 	line = space_line(line);
@@ -63,8 +65,8 @@ t_unit		*parse(t_shell *shell)
 	free(line);
 	if (!check_valid(shell->first))
 		shell->first = free_units(shell->first);
-	t_unit *start;
-	start = shell->first;
+	//t_unit *start;
+	//start = shell->first;
 	//if (start)
 	//{
 	//while (start)

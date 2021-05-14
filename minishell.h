@@ -78,9 +78,18 @@ typedef struct 	s_termcap
 
 typedef struct		s_shell
 {
+
+	int				last_ret;
+	int				recurs_exit;
+	int				ch_status;
+	int				ch_ret;
+	pid_t			ch_pid;
+	int				pipein;
+	int				pipeout;
 	int				fdout;
 	int				fdin;
 	int				ret;
+	int				status;
 	int				in;
 	int				out;
 	t_env			*env;
@@ -94,7 +103,10 @@ typedef struct		s_sig
 {
 	pid_t			pid;
 	int				flag;
+	int				flagint;
 	int				exit;
+	int				ch_flagint;
+	int				ch_flagquit;
 }					t_sig;
 
 t_sig		sig;

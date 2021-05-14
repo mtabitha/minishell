@@ -73,7 +73,7 @@ char		*parse_dollar(char *str, t_shell *shell)
 	{
 		if (str[i] == -36)
 			if (str[i + 1] == '?' && (i += 2))
-				line = ft_itoa(shell->ret);
+				line = ft_itoa(shell->last_ret);
 			else 
 				line = env_dollar(str, &i, shell->env);
 		else

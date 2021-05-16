@@ -61,25 +61,10 @@ t_unit		*parse(t_shell *shell)
 		return (NULL);
 	line = space_line(line);
 	shell->first = set_units(line, shell->env);
-	dollar(shell->first, shell);
+	set_unit_type(shell->first);
 	free(line);
 	if (!check_valid(shell->first))
 		shell->first = free_units(shell->first);
-	//t_unit *start;
-	//start = shell->first;
-	//if (start)
-	//{
-	//while (start)
-	//{
-	//	ft_putstr_fd(start->str, 1);
-	//	ft_putstr_fd(" ", 1);
-	//	ft_putstr_fd(ft_itoa(start->type), 1);
-	//	start = start->next;
-	//	ft_putstr_fd(" ", 1);
-	//}
-	//}
-	//write(1, "\n", 1);
-
 	return (shell->first);
 
 

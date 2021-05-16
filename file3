@@ -1,0 +1,14 @@
+Makefile
+cat
+file1
+file2
+file3
+libft
+main.c
+minishell
+minishell.a
+minishell.dSYM
+minishell.h
+parse
+signals
+termcap

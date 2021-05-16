@@ -91,7 +91,6 @@ void		dollar(t_unit *unit, t_shell *shell)
 	{
 		if (ft_strchr(unit->str, (char)(-36)))
 			unit->str = parse_dollar(unit->str, shell);
-		set_unit_type(unit);
 		unit = unit->next;
 	}
 }

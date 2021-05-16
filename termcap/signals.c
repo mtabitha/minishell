@@ -20,9 +20,11 @@ void		handle_sigquit(int ret)
 	if (sig.pid != -1)
 	{
 		sig.ch_flagquit = 1;
-		ft_putstr_fd("Quit: ", 1);
-		ft_putstr_fd(str, 1);
-		write(1, "\n", 1);
+		if (!sig.main_proc)
+			return ;
+		ft_putstr_fd("Quit: ", 2);
+		ft_putstr_fd(str, 2);
+		write(2, "\n", 1);
 		sig.exit = 131;
 	}
 	free(str);
@@ -33,16 +35,15 @@ void		handle_sigint(int ret)
 	if (sig.pid != -1)
 	{
 		sig.ch_flagint = 1;
-		write(1, "\n", 1);
+		write(2, "\n", 1);
 		sig.exit = 130;
 	}
 	else
 	{
 		sig.flagint = 1;
 		sig.exit = 1;
-		write(1, "\n", 1);
+		write(2, "\n", 2);
 		ft_putstr_fd("minishell > ", 2);
-		tputs(delete_character, 1, ft_putchar);
 	}
 }
 
@@ -54,4 +55,5 @@ void		init_sig(void)
 	sig.flag = 0;
 	sig.ch_flagquit = 0;
 	sig.ch_flagint = 0;
+	sig.main_proc = 1;
 }

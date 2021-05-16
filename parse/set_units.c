@@ -74,24 +74,28 @@ t_unit		*new_unit_str(char *line, int *i, t_env *env)
 
 void		set_unit_type(t_unit *unit)
 {
-	if (!ft_strncmp("", unit->str, 1))
-		unit->type = ETY;
-	else if (!ft_strncmp(">", unit->str, 2))
-		unit->type = TRUNK;
-	else if (!ft_strncmp(">>", unit->str, 3))
-		unit->type = APPEND;
-	else if (!ft_strncmp("<", unit->str, 2))
-		unit->type = IN;
-	else if (!ft_strncmp("|", unit->str, 2))
-		unit->type = PIPE;
-	else if (!ft_strncmp(";", unit->str, 2))
-		unit->type = END;
-	else if (unit->prev == NULL || unit->prev->type >= PIPE)
-		unit->type = CMD;
-	else if (unit->prev->type >= TRUNK && unit->prev->type <= IN)
-		unit->type = FILE;
-	else
-		unit->type = ARG;	
+	while (unit)
+	{
+		if (!ft_strncmp("", unit->str, 1))
+			unit->type = ETY;
+		else if (!ft_strncmp(">", unit->str, 2))
+			unit->type = TRUNK;
+		else if (!ft_strncmp(">>", unit->str, 3))
+			unit->type = APPEND;
+		else if (!ft_strncmp("<", unit->str, 2))
+			unit->type = IN;
+		else if (!ft_strncmp("|", unit->str, 2))
+			unit->type = PIPE;
+		else if (!ft_strncmp(";", unit->str, 2))
+			unit->type = END;
+		else if (unit->prev == NULL || unit->prev->type >= PIPE)
+			unit->type = CMD;
+		else if (unit->prev->type >= TRUNK && unit->prev->type <= IN)
+			unit->type = FILE;
+		else
+			unit->type = ARG;
+		unit = unit->next;
+	}	
 }
 
 t_unit		*set_units(char *line, t_env *env)

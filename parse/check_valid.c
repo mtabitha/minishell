@@ -19,10 +19,10 @@ int		type_error(t_unit *unit)
 	str = "newline";
 	if (unit)
 		str = unit->str;
-	ft_putstr_fd("\n",1);	
 	ft_putstr_fd("minishell: syntax error near unexpected token `", 1);
 	ft_putstr_fd(str, 1);
 	ft_putstr_fd("\"", 1);
+	ft_putstr_fd("\n",1);
 	return (1);
 }
 
@@ -37,7 +37,7 @@ int			no_valid_unit(t_unit *unit)
 		else if (unit->type == IN)
 			return (type_error(unit->next));
 	}
-	if (unit->prev == NULL || (unit->prev && unit->prev->type > FILE))
+	if (unit->prev == NULL || (unit->prev && unit->prev->type > FILE) || unit->next == NULL)
 	{
 		if (unit->type == PIPE)
 			return (type_error(unit));

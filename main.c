@@ -12,6 +12,45 @@
 
 #include "minishell.h"
 
+char		**take_path(t_env *envi)
+{
+	char **path;
+	char *tmp;
+	
+	path = NULL;
+	while (envi)
+	{
+		if (!ft_strncmp("PATH=", envi->str, 5))
+		{
+			path = ft_split_str(&envi->str[5], ":");
+			int i = 0;
+			while (path[i])
+			{
+				tmp = path[i];
+				path[i] = ft_strjoin(path[i], "/");
+				free(tmp);
+				i++;
+			}		
+		}
+		envi = envi->next;
+	}
+	return (path);
+}
+
+void		init_ch(t_child *ch)
+{
+	ch->pid = -1;
+	ch->ret = 0;
+	ch->status = 0;
+}
+
+void		init_pr(t_shell *shell)
+{
+	shell->ret = 0;
+	shell->last_ret = 0;
+	shell->main_proc = 1;
+}
+
 int			this_type(t_unit *unit, int type)
 {
 	if (unit->type == type)
@@ -57,12 +96,19 @@ void		init_fd(t_shell *shell)
 	shell->fdout = -1;
 }
 
+void		fd_close(int fd)
+{
+	if (fd > 0)
+		close(fd);
+}
+
 void		close_fd(t_shell *shell)
 {
-	close(shell->fdin);
-	close(shell->fdout);
-	close(shell->pipein);
-	close(shell->pipeout);
+	
+	fd_close(shell->fdin);
+	fd_close(shell->fdout);
+	fd_close(shell->pipein);
+	fd_close(shell->pipeout);
 }
 
 void		init_std(t_shell *shell)
@@ -91,7 +137,7 @@ void	trunk_append(t_shell *shell, t_unit *unit)
 		close(shell->fdout);
 	if (unit->prev->type == TRUNK)
 		shell->fdout = open(unit->str, O_CREAT | O_WRONLY | O_TRUNC, S_IRWXU);
-	if (unit->prev->type == APPEND)
+	else
 		shell->fdout = open(unit->str, O_CREAT | O_WRONLY | O_APPEND, S_IRWXU);
 	dup2(shell->fdout, 1);
 }
@@ -103,9 +149,13 @@ void	in(t_shell *shell, t_unit *unit)
 	shell->fdin = open(unit->str, O_RDONLY | S_IRWXU);
 	if (shell->fdin == -1)
 	{
-		ft_putstr_fd("minishell: no such file or directory: ", 1);
+		ft_putstr_fd("minishell: ", 1);
 		ft_putstr_fd(unit->str, 1);
+		ft_putstr_fd(": No such file or directory", 1);
 		ft_putstr_fd("\n", 1);
+		shell->last_ret = 1;
+		shell->recurs_exit = 1;
+		return ;
 	}
 	dup2(shell->fdin, 0);
 }
@@ -115,24 +165,26 @@ int		pipe_work(t_shell *shell, t_unit *unit)
 	int			fd[2];
 
 	pipe(fd);
-	shell->ch_pid = fork();
-	if (!shell->ch_pid)
+	shell->ch.pid = fork();
+	if (!shell->ch.pid)
 	{
+		shell->main_proc = 0;
+		sig.main_proc = 0;
 		close(fd[1]);
 		shell->pipein = fd[0];
-		dup2(fd[0], 0);
+		dup2(fd[0], 0);		
 		return (0);
 	}
 	else
 	{
 		close(fd[0]);
-		shell->pipein = fd[1];
+		shell->pipeout = fd[1];
 		dup2(fd[1], 1);
 		return (1);
 	}
 }
 
-int			count_cmd(t_unit *unit)
+int			count_argv(t_unit *unit)
 {
 	int		i;
 
@@ -146,13 +198,13 @@ int			count_cmd(t_unit *unit)
 	return (i);
 }
 
-char		**create_cmd(t_unit *unit)
+char		**create_argv(t_unit *unit)
 {
 	char 	**cmd;
 	int		i;
 
 	i = 0;
-	cmd = (char **)malloc(sizeof(char *) * (count_cmd(unit) + 1));
+	cmd = (char **)malloc(sizeof(char *) * (count_argv(unit) + 1));
 	while (unit && unit->type < PIPE)
 	{
 		if (unit->type < FILE)
@@ -181,49 +233,116 @@ char		**create_env_mass(t_env *env)
 	return (env_mass);
 }
 
-void		exec_cmd(t_shell *shell, t_unit *unit)
+void			check_exist_file(char *filename, t_env *env, char **argv)
 {
-	char	**cmd;
-	int		i;
-	char 	*path;
 	char	**env_mass;
-	int		pid;
-	int		ret;
+	char	**path;
+	char	*cmd;
+	int 	i;
+
+	i = 0;
+	env_mass = create_env_mass(env);
+	path = take_path(env);
+	while(path && path[i])
+	{
+		cmd = ft_strjoin_for_gnl(path[i++], filename);
+		execve(cmd, argv, env_mass);
+		free(cmd);
+	}
 	
-	cmd = create_cmd(unit);
-	env_mass = create_env_mass(shell->env);
-	path = ft_strjoin("/bin/", *cmd);
+}
+
+int			exec_execve(t_env *env, char **argv, char **envp)
+{
+	int		ret;
+	char	*filename;
+	int		with_path;
+	DIR		*dir;
+	int		fd;
+	
+	with_path = 1;
 	sig.pid = fork();
 	if (!sig.pid)
 	{
-
-		ft_putstr_fd(path, 2);
-		write(2, "\n", 1);
-		execve(path, cmd, env_mass);
-		ft_putstr_fd(path, 2);
-		ft_putstr_fd(" - NOT FOUND COMMAND\n", 2);
-
-		exit(127); // 127 command not found
-	}
+		filename = ft_strdup(*argv);
+		if (!ft_strchr(filename, '/') && get_env("PATH=", env))
+		{
+			with_path = 0;
+			check_exist_file(filename, env, argv);
+		}
+		execve(filename, argv, envp);
+		fd = open(filename, O_RDWR);
+		dir = opendir(filename);
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(filename, 2);
+		if (with_path == 0)
+			ft_putstr_fd(": command not found\n", 2);
+		else if (fd == -1 && dir != NULL)
+			ft_putstr_fd(": is a directory\n", 2);
+		else if (fd != -1 && dir == NULL)
+			ft_putstr_fd(": Permission denied\n", 2);
+		else
+			ft_putstr_fd(": No such file or directory\n", 2);
+			
+		closedir(dir);
+		close(fd);
+		exit(127);
+	}	
 	else
 		waitpid(sig.pid, &ret, 0);
-	shell->ret = WEXITSTATUS(ret);
+	return (WEXITSTATUS(ret));
+}
+
+int		has_build_in(char **cmd)
+{
+	if (!ft_strncmp(cmd[0], "echo", 4) && ft_strlen(cmd[0]) == 4)
+		return(1);
+	else if (!ft_strncmp(cmd[0], "cd", 2) && ft_strlen(cmd[0]) == 2)
+		return(1);
+	else if (!ft_strncmp(cmd[0], "pwd", 3) && ft_strlen(cmd[0]) == 3)
+		return(1);
+	else if (!ft_strncmp(cmd[0], "export", 6) && ft_strlen(cmd[0]) == 6)
+		return(1);
+	else if (!ft_strncmp(cmd[0], "unset", 5) && ft_strlen(cmd[0]) == 5)
+		return(1);
+	else if (!ft_strncmp(cmd[0], "env", 3) && ft_strlen(cmd[0]) == 3)
+		return(1);
+	else if (!ft_strncmp(cmd[0], "exit", 4) && ft_strlen(cmd[0]) == 4)
+		return(1);
+	return (0);
+}
+
+void		exec_cmd(t_shell *shell, t_unit *unit)
+{
+	char	**argv;
+	char 	**path;
+	char	**envp;
+
+	dollar(unit, shell);
+	envp = create_env_mass(shell->env);
+	argv = create_argv(unit);
+	if (has_build_in(argv))
+		shell->ret = built_in_cmd(argv, shell->env, path, envp);
+	else
+		shell->ret = exec_execve(shell->env, argv, envp);
+	int		i = 0;
+	//t_env *ptr = shell->env;
+	//while (ptr)
+	//{
+	//	ft_putstr_fd(ptr->str, 1);
+	//	ft_putstr_fd("\n", 1);
+	//	ptr = ptr->next;
+	//}
+
 	shell->last_ret = shell->ret;
 	if (sig.ch_flagint || sig.ch_flagquit)
 	{
 		shell->ret = sig.exit;
 		shell->last_ret = sig.exit;
 	}
-	ft_putstr_fd(ft_itoa(shell->ret), 2);
-	ft_putstr_fd(" - command return", 2);
-	ft_putstr_fd(path, 2);
-	write(2, "\n", 1);
-
-
 	init_sig();
-	ft_free(env_mass);
-	ft_free(cmd);
-	free(path);
+	ft_free(argv);
+	ft_free(envp);
 	shell->recurs_exit = 1;
 }
 
@@ -247,7 +366,7 @@ void	redir(t_shell *shell, t_unit *unit)
 		else if (prev->type == PIPE)
 			main_proc = pipe_work(shell, unit);
 	}
-	if (next && (next->type != END))
+	if (next && (next->type != END) && !main_proc)
 		redir(shell, next->next);
 	if (!shell->recurs_exit && unit->type == CMD && !main_proc &&
 			(!prev || prev->type >= PIPE))
@@ -266,29 +385,18 @@ void		run(t_shell *shell)
 		close_fd(shell);
 		init_fd(shell);
 		init_std(shell);
-		if (shell->ch_pid != -1)
+		waitpid(-1, &shell->ch.status, 0);
+		shell->ch.ret = WEXITSTATUS(shell->ch.status);
+		if (shell->ch.ret)
 		{
-			if (!shell->ch_pid)
-			{
-				ft_putstr_fd(ft_itoa(shell->ret), 2);
-				ft_putstr_fd(" - child return\n", 2);
-				exit(shell->ret);
-			}
-			else
-			{
-				waitpid(shell->ch_pid, &shell->ch_status, 0);
-	    		shell->ch_ret = WEXITSTATUS(shell->ch_status);
-				shell->last_ret = shell->ch_ret;
-				shell->ret = shell->ch_ret;
-				ft_putstr_fd(ft_itoa(shell->ch_ret), 2);
-				ft_putstr_fd(" - pipe return\n", 2);
-			}
+			shell->ret = shell->ch.ret;
+			shell->last_ret = shell->ch.ret;
 		}
-		shell->ch_pid = -1;
+		if (!shell->main_proc)
+			exit(shell->ret);
+		init_ch(&shell->ch);
 		shell->recurs_exit = 0;
 	}
-
-	
 }
 
 int			main(int argc, char *argv[], char **env)
@@ -301,16 +409,14 @@ int			main(int argc, char *argv[], char **env)
 
 	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, handle_sigquit);
-	shell.exit = 0;
-	shell.ret = 0;
-	shell.ch_pid = -1;
-	shell.last_ret = 0;
 	set_envs(&shell.env, env);
 	set_shlvl(shell.env);
+	init_pr(&shell);
+	init_ch(&shell.ch);
 	init_termcap(&shell.tmp);
 	init_fd(&shell);
 	init_sig();
-	while (shell.exit == 0)
+	while (1)
 	{
 		shell.recurs_exit = 0;
 		shell.first = parse(&shell);

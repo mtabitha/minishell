@@ -23,6 +23,8 @@
 # include <termios.h>
 # include <term.h>
 # include <signal.h>
+# include <sys/types.h>
+# include <dirent.h>
 
 # define ETY  0
 # define CMD  1
@@ -76,25 +78,30 @@ typedef struct 	s_termcap
 	t_list		*history;
 }				t_termcap;
 
+typedef struct		s_child
+{
+	pid_t			pid;
+	int				ret;
+	int				status;
+}					t_child;
+
+
 typedef struct		s_shell
 {
-
-	int				last_ret;
 	int				recurs_exit;
-	int				ch_status;
-	int				ch_ret;
-	pid_t			ch_pid;
 	int				pipein;
 	int				pipeout;
 	int				fdout;
 	int				fdin;
+	int				main_proc;
 	int				ret;
+	int				last_ret;
 	int				status;
 	int				in;
 	int				out;
+	t_child			ch;
 	t_env			*env;
 	t_unit			*first;
-	int				exit;
 	t_termcap 		tmp;
 	struct termios 	term;
 }					t_shell;
@@ -107,6 +114,7 @@ typedef struct		s_sig
 	int				exit;
 	int				ch_flagint;
 	int				ch_flagquit;
+	int				main_proc;
 }					t_sig;
 
 t_sig		sig;
@@ -153,4 +161,22 @@ void		handle_sigint(int ret);
 void		init_sig(void);
 void	clean_buf(char *buf);
 
+
+int    		built_in_cmd(char **cmd, t_env *envi, char **path, char **env_mass);
+void		ft_lstadd_back(t_env **lst, t_env *new);
+int    		echo(char **cmd);
+int		    exit_cmd(char **cmd);
+int			env(t_env *envi, char **unit);
+int			pwd(t_env *envi, char **cmd);//показать Чингизу
+t_env		*ft_lstnew(void *content);
+int			export(t_env *envi, char **cmd);
+void    	copy_back(t_env *dst, t_env *src, int len_args_unit);
+int     	has_equal(char *str);
+void    	sorting_env(t_env *envi);
+void    	output_sorted_env(t_env *envi, char **split_strs);
+int			unset(t_env *envi, char **cmd);
+char    	*left_part(char *arr);
+int			cd(t_env *envi, char **cmd, char **path, char **env_mass);
+int			valid_arg(char *cmd);
+int     	has_exclamation_sign(char **cmd);
 #endif

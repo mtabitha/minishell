@@ -2,6 +2,8 @@
 
 PARS_P = ./parse/
 TERM_P = ./termcap/
+LOGIC_P = ./logic/
+
 PARS_SRCS = dollar.c	 \
 			env.c		 \
 			parse.c		 \
@@ -17,6 +19,19 @@ TERM_SRCS = button_arrow.c \
 			termcap_flag.c \
 			signals.c
 
+LOGIC_SRCS = built_in.c\
+            ft_lstadd_back.c\
+            ft_lstnew.c\
+            echo.c\
+            exit.c\
+            envv.c\
+            pwd.c\
+            export.c\
+            export_one_arg.c\
+            unset.c\
+            ft_putnbr.c\
+			cd.c
+
 INC = ./minishell.h
 LIBFT_A = $(LIBFT_P)libft.a
 LIBFT_P = ./libft/
@@ -24,10 +39,11 @@ NAME = minishell.a
 CC = gcc
 CFLAGS = -g -I$(INC) 
 
-OBJS = $(PARS_OBJS:.c=.o) $(TERM_OBJS:.c=.o)
+OBJS = $(PARS_OBJS:.c=.o) $(TERM_OBJS:.c=.o) $(LOGIC_OBJS:.c=.o)
 
 PARS_OBJS =	$(addprefix $(PARS_P), $(PARS_SRCS))
 TERM_OBJS =	$(addprefix $(TERM_P), $(TERM_SRCS))
+LOGIC_OBJS =	$(addprefix $(LOGIC_P), $(LOGIC_SRCS))
 all : $(NAME)
 
 $(NAME) : $(OBJS) main.c

@@ -161,6 +161,16 @@ void		handle_sigint(int ret);
 void		init_sig(void);
 void	clean_buf(char *buf);
 
+char		**create_env_mass(t_env *env);
+void	redir_pipe(t_shell *shell, t_unit *unit);
+void		exec_cmd(t_shell *shell, t_unit *unit);
+int			exec_execve(t_env *env, char **argv, char **envp);
+t_unit		*next_type(t_unit *unit);
+t_unit		*prev_type(t_unit *unit);
+void		init_ch(t_child *ch);
+void		init_pr(t_shell *shell);
+void		init_std(t_shell *shell);
+void		init_fd(t_shell *shell);
 
 int    		built_in_cmd(char **cmd, t_env *envi, char **path, char **env_mass);
 void		ft_lstadd_back(t_env **lst, t_env *new);

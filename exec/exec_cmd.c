@@ -36,7 +36,7 @@ char		**create_argv(t_unit *unit)
 	while (unit && unit->type < PIPE)
 	{
 		if (unit->type < FILE)
-			cmd[i++] = unit->str;
+			cmd[i++] = ft_strdup(unit->str);
 		unit = unit->next;
 	}
 	cmd[i] = NULL;
@@ -58,6 +58,7 @@ char		**create_env_mass(t_env *env)
 		env = env->next; 
 	}
 	env_mass = ft_split_str(env_arr, "\n");
+	free(env_arr);
 	return (env_mass);
 }
 
@@ -83,14 +84,13 @@ int		has_build_in(char **cmd)
 void		exec_cmd(t_shell *shell, t_unit *unit)
 {
 	char	**argv;
-	char 	**path;
 	char	**envp;
 
 	dollar(unit, shell);
 	envp = create_env_mass(shell->env);
 	argv = create_argv(unit);
 	if (has_build_in(argv))
-		shell->ret = built_in_cmd(argv, shell->env, path, envp);
+		shell->ret = built_in_cmd(argv, shell->env);
 	else
 		shell->ret = exec_execve(shell->env, argv, envp);
 	shell->last_ret = shell->ret;

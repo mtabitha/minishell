@@ -51,7 +51,8 @@ t_unit		*parse(t_shell *shell)
 	char 	*line;
 
 	line = NULL;
-	ft_putstr_fd("minishell > ", 1);
+	ft_putstr_fd(getcwd(NULL, 0), 2);
+	ft_putstr_fd(" minishell > ", 1);
 	set_flag(&shell->tmp, &shell->term);
 	line = ft_strdup(termcap(&shell->tmp));
 	reset_flag(&shell->term);
@@ -60,13 +61,10 @@ t_unit		*parse(t_shell *shell)
 	if (quote_err(line) || !line)
 		return (NULL);
 	line = space_line(line);
-	shell->first = set_units(line, shell->env);
+	shell->first = set_units(line);
 	set_unit_type(shell->first);
 	free(line);
 	if (!check_valid(shell->first))
 		shell->first = free_units(shell->first);
 	return (shell->first);
-
-
-
 }

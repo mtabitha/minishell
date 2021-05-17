@@ -124,6 +124,7 @@ int         export(t_env *envi, char **cmd)
     t_env   *envi_dup;
     int     exc_sign;
 
+    split_strs = NULL;
     ret = 0;
     exc_sign = 1;
     envi_dup = NULL;

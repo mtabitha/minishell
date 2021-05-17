@@ -56,19 +56,17 @@ void 		parse_new_unit_str(char *line, char *new_str, int *i)
 	new_str[j] = 0;
 }
 
-t_unit		*new_unit_str(char *line, int *i, t_env *env)
+t_unit		*new_unit_str(char *line, int *i)
 {
 	t_unit	*new;
 	char	*new_str;
-	char	*ptr;
 
 	if (!(new = (t_unit *)malloc(sizeof(t_unit))) ||
 			!(new_str = (char *)malloc(sizeof(char) *
 				(count_new_unit_str(line, *i) + 1))))
 		return (NULL);
 	parse_new_unit_str(line, new_str, i);
-	new->str = ft_strdup(new_str);
-	free(new_str);
+	new->str = new_str;
 	return (new);
 }
 
@@ -98,7 +96,7 @@ void		set_unit_type(t_unit *unit)
 	}	
 }
 
-t_unit		*set_units(char *line, t_env *env)
+t_unit		*set_units(char *line)
 {
 	t_unit	*unit;
 	t_unit	*next;
@@ -110,7 +108,7 @@ t_unit		*set_units(char *line, t_env *env)
 	space_skip(line, &i);
 	while (line[i])
 	{
-		next = new_unit_str(line, &i, env);
+		next = new_unit_str(line, &i);
 		next->prev = unit;
 		next->next = NULL;
 		if (unit)

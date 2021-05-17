@@ -1,8 +1,7 @@
 #include "../minishell.h"
 
-int    pwd(t_env *envi, char **cmd)//показать Чингизу
+int    pwd(char **cmd)//показать Чингизу
 {
-    char **str;
     char *buf;
     int exc_sign;
 

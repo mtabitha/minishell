@@ -32,6 +32,8 @@ void		handle_sigquit(int ret)
 
 void		handle_sigint(int ret)
 {
+	(void)ret;
+
 	if (sig.pid != -1)
 	{
 		sig.ch_flagint = 1;
@@ -43,7 +45,8 @@ void		handle_sigint(int ret)
 		sig.flagint = 1;
 		sig.exit = 1;
 		write(2, "\n", 2);
-		ft_putstr_fd("minishell > ", 2);
+		ft_putstr_fd(getcwd(NULL, 0), 2);
+		ft_putstr_fd(" minishell > ", 2);//?
 	}
 }
 

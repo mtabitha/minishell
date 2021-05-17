@@ -36,7 +36,7 @@ void	add_ch(char **buf, int pos, char *str)
 	len = ft_strlen(*buf);	
 	if (len == pos)
 	{
-		*buf = ft_strjoin(*buf, str);
+		*buf = ft_strjoin_for_gnl(*buf, str);
 		return ;
 	}
 	ptr = (char *)malloc(sizeof(char) * (len + 2));

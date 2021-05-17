@@ -128,7 +128,7 @@ t_unit		*parse(t_shell *shell);
 
 char		*space_line(char *line);
 void		set_unit_type(t_unit *unit);
-t_unit		*set_units(char *line, t_env *env);
+t_unit		*set_units(char *line);
 void		dollar(t_unit *unit, t_shell *shell);
 int			in_quote(char *str, int	pos);
 int			check_valid(t_unit *first);
@@ -172,21 +172,21 @@ void		init_pr(t_shell *shell);
 void		init_std(t_shell *shell);
 void		init_fd(t_shell *shell);
 
-int    		built_in_cmd(char **cmd, t_env *envi, char **path, char **env_mass);
-void		ft_lstadd_back(t_env **lst, t_env *new);
-int    		echo(char **cmd);
-int		    exit_cmd(char **cmd);
-int			env(t_env *envi, char **unit);
-int			pwd(t_env *envi, char **cmd);//показать Чингизу
-t_env		*ft_lstnew(void *content);
-int			export(t_env *envi, char **cmd);
-void    	copy_back(t_env *dst, t_env *src, int len_args_unit);
-int     	has_equal(char *str);
-void    	sorting_env(t_env *envi);
-void    	output_sorted_env(t_env *envi, char **split_strs);
-int			unset(t_env *envi, char **cmd);
-char    	*left_part(char *arr);
-int			cd(t_env *envi, char **cmd, char **path, char **env_mass);
-int			valid_arg(char *cmd);
-int     	has_exclamation_sign(char **cmd);
+int         built_in_cmd(char **cmd, t_env *envi);
+void        ft_lstadd_back(t_env **lst, t_env *new);
+int         echo(char **cmd);
+int         exit_cmd(char **cmd);
+int         env(t_env *envi, char **unit);
+int         pwd(char **cmd);//показать Чингизу
+t_env       *ft_lstnew(void *content);
+int         export(t_env *envi, char **cmd);
+void        copy_back(t_env *dst, t_env *src, int len_args_unit);
+int         has_equal(char *str);
+void        sorting_env(t_env *envi);
+void        output_sorted_env(t_env *envi, char **split_strs);
+int         unset(t_env *envi, char **cmd);
+char        *left_part(char *arr);
+int         cd(t_env *envi, char **cmd);
+int         valid_arg(char *cmd);
+int         has_exclamation_sign(char **cmd);
 #endif

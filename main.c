@@ -84,8 +84,7 @@ int			main(int argc, char *argv[], char **env)
 		shell.first = parse(&shell);
 		if (shell.first)
 			run(&shell);
-		//free_units(shell.first);	
+		free_units(shell.first);	
 	}
-	//free_envs(shell.env);
 	return (shell.ret);
 }

@@ -44,9 +44,9 @@ LIBFT_A = $(LIBFT_P)libft.a
 LIBFT_P = ./libft/
 NAME = minishell.a
 CC = gcc
-CFLAGS = -g -I$(INC) 
+CFLAGS = -Wall -Wextra -Werror -g -I$(INC) 
 
-OBJS = $(PARS_OBJS:.c=.o) $(TERM_OBJS:.c=.o) $(LOGIC_OBJS:.c=.o) $(EXEC_OBJS:.c=.o)
+OBJS = $(PARS_OBJS:.c=.o) $(TERM_OBJS:.c=.o)  $(EXEC_OBJS:.c=.o) $(LOGIC_OBJS:.c=.o)
 
 PARS_OBJS =	$(addprefix $(PARS_P), $(PARS_SRCS))
 TERM_OBJS =	$(addprefix $(TERM_P), $(TERM_SRCS))

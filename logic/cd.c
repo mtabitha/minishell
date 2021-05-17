@@ -1,6 +1,6 @@
 #include "../minishell.h"
 
-int    cd(t_env *envi, char **cmd, char **path, char **env_mass)
+int    cd(t_env *envi, char **cmd)
 {
     int     answer;
     char    **split_home;

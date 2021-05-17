@@ -41,7 +41,7 @@ void	in(t_shell *shell, t_unit *unit)
 	dup2(shell->fdin, 0);
 }
 
-int		pipe_work(t_shell *shell, t_unit *unit)
+int		pipe_work(t_shell *shell)
 {
 	int			fd[2];
 
@@ -83,7 +83,7 @@ void	redir_pipe(t_shell *shell, t_unit *unit)
 		else if (prev->type == IN)
 			in(shell, unit);
 		else if (prev->type == PIPE)
-			main_proc = pipe_work(shell, unit);
+			main_proc = pipe_work(shell);
 	}
 	if (next && (next->type != END) && !main_proc)
 		redir_pipe(shell, next->next);

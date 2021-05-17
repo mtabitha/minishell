@@ -1,8 +1,7 @@
 #include "../minishell.h"
 
-void    replace_str(t_env *envi, t_env *start_envi, char *left_unit, char *left_envi)
+void    replace_str(t_env *envi, t_env *start_envi, char *left_envi)
 {
-    size_t len_unit;
     size_t len_envi;
     char    *left_going;
     char *left_start_envi;
@@ -64,7 +63,7 @@ int     unset(t_env *envi, char **cmd)
             left_envi = left_part(envi->str);
             if (!ft_strncmp(left_cmd, left_envi, ft_strlen(left_cmd)) && ft_strlen(left_cmd) == ft_strlen(left_envi))
             {
-                replace_str(envi, start_envi, left_cmd, left_envi);
+                replace_str(envi, start_envi, left_envi);
                 envi = start_envi;
                 break ;
             }

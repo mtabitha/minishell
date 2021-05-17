@@ -52,9 +52,6 @@ int    is_nbr(char *str)
             nbr = 0;
         index++;
     }
-    printf("valid_nbr: %d\n", nbr);
-    printf("len_digits: %d\n", count_digits(str));
-    printf("is_our_diapason?: %d\n", is_our_diapason(str));
     if (nbr && count_digits(str) <= 19 && is_our_diapason(str))
         return (1);
     return(0);

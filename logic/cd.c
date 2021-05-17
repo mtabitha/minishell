@@ -16,7 +16,7 @@ int    cd(t_env *envi, char **cmd)
     cmd_exp[2] = NULL;
     if (!ft_strncmp("cd", cmd[0], 2) && ft_strlen(cmd[0]) == 2)
     {
-        if (cmd[1] && (!ft_strncmp("~", cmd[1], 1) && ft_strlen(cmd[1]) == 1))
+        if (!cmd[1] || (cmd[1] && (!ft_strncmp("~", cmd[1], 1) && ft_strlen(cmd[1]) == 1)))
         {
             while (envi && ft_strncmp("HOME=", envi->str, 5))
                 envi = envi->next;

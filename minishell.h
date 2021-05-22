@@ -56,6 +56,7 @@ typedef struct		s_unit
 	struct s_unit	*prev;
 	int				type;
 	char			*str;
+	int				in_quote;
 }					t_unit;
 
 typedef struct	s_list

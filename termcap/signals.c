@@ -14,20 +14,16 @@
 
 void		handle_sigquit(int ret)
 {
-	char	*str;
-
-	str = ft_itoa(ret);
+	(void)ret;
+	
 	if (sig.pid != -1)
 	{
 		sig.ch_flagquit = 1;
 		if (!sig.main_proc)
 			return ;
-		ft_putstr_fd("Quit: ", 2);
-		ft_putstr_fd(str, 2);
-		write(2, "\n", 1);
+		ft_putstr_fd("Quit: 3\n", 2);
 		sig.exit = 131;
 	}
-	free(str);
 }
 
 void		handle_sigint(int ret)

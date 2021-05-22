@@ -52,5 +52,7 @@ void		set_shlvl(t_env *env)
 		nbr = ft_atoi(arr_nbr) + 1;
 	free(arr_nbr);
 	free(env->str);
-	env->str = ft_strjoin("SHLVL=", ft_itoa(nbr));
+	arr_nbr =  ft_itoa(nbr);
+	env->str = ft_strjoin("SHLVL=", arr_nbr);
+	free(arr_nbr);
 }

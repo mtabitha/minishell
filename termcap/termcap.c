@@ -26,7 +26,7 @@ void	delete_ch(char **buf, int pos)
 	(*buf)[pos] = 0;
 	if (len == pos)
 		return ;
-	*buf = ft_strjoin(*buf, &(buf[0][pos + 1]));
+	*buf = ft_strjoin_for_gnl(*buf, &(buf[0][pos + 1]));
 }
 
 void	add_ch(char **buf, int pos, char *str)
@@ -49,7 +49,7 @@ void	add_ch(char **buf, int pos, char *str)
 
 void	button_eof(t_termcap *tmp)
 {
-	if (*(tmp->new->content) == 0)
+	if (*(tmp->new->content) == 0 && !tmp->in_hist)
 	{
 		write(1, "exit\n", 5);
 		exit(0);

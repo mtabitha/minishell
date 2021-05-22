@@ -65,6 +65,10 @@ t_unit		*new_unit_str(char *line, int *i)
 			!(new_str = (char *)malloc(sizeof(char) *
 				(count_new_unit_str(line, *i) + 1))))
 		return (NULL);
+	if (line[*i] == '\'' || line[*i] == '\"')
+		new->in_quote = 1;
+	else
+		new->in_quote = 0;
 	parse_new_unit_str(line, new_str, i);
 	new->str = new_str;
 	return (new);
@@ -74,17 +78,17 @@ void		set_unit_type(t_unit *unit)
 {
 	while (unit)
 	{
-		if (!ft_strncmp("", unit->str, 1))
+		if (!ft_strncmp("", unit->str, 1) && !unit->in_quote)
 			unit->type = ETY;
-		else if (!ft_strncmp(">", unit->str, 2))
+		else if (!ft_strncmp(">", unit->str, 2) && !unit->in_quote)
 			unit->type = TRUNK;
-		else if (!ft_strncmp(">>", unit->str, 3))
+		else if (!ft_strncmp(">>", unit->str, 3) && !unit->in_quote)
 			unit->type = APPEND;
-		else if (!ft_strncmp("<", unit->str, 2))
+		else if (!ft_strncmp("<", unit->str, 2) && !unit->in_quote)
 			unit->type = IN;
-		else if (!ft_strncmp("|", unit->str, 2))
+		else if (!ft_strncmp("|", unit->str, 2) && !unit->in_quote)
 			unit->type = PIPE;
-		else if (!ft_strncmp(";", unit->str, 2))
+		else if (!ft_strncmp(";", unit->str, 2) && !unit->in_quote)
 			unit->type = END;
 		else if (unit->prev == NULL || unit->prev->type >= PIPE)
 			unit->type = CMD;

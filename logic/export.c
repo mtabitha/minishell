@@ -64,8 +64,10 @@ int    cmp_unit_env(char **cmd, t_env *envi, char *left_cmd)
                 envi->str = ft_strdup(cmd[ind]);
                 free(tmp);
             }
+            free(left_envi);
             return (0);
         }
+        free(left_envi);
         envi = envi->next;
     }
     return (1);
@@ -86,6 +88,7 @@ int    check_valid_export(char **cmd, t_env *envi)
             left_cmd = left_part(cmd[ind]);
             if (cmp_unit_env(&cmd[ind], envi, left_cmd))
                 ft_lstadd_back(&envi, ft_lstnew(cmd[ind]));
+            free(left_cmd);
         }
         else
             ret = 1;
@@ -112,7 +115,8 @@ void    delete_lst(t_env *envi_dup)
     while (envi_dup)
     {
         tmp = envi_dup;
-        envi_dup = envi_dup->next;        
+        envi_dup = envi_dup->next;
+        free(tmp->str);      
         free(tmp);
     }
 }

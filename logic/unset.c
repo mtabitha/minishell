@@ -15,6 +15,9 @@ void    replace_str(t_env *envi, t_env *start_envi, char *left_envi)
         if (!ft_strncmp(left_going, left_envi, len_envi) && len_envi == ft_strlen(left_start_envi))
         {
             start_envi->next = envi->next;
+            free(envi->str);
+            envi->next = NULL;
+            free(envi);
             free(left_going);
             free(left_start_envi);
             break;
@@ -65,10 +68,13 @@ int     unset(t_env *envi, char **cmd)
             {
                 replace_str(envi, start_envi, left_envi);
                 envi = start_envi;
+                free(left_envi);
                 break ;
             }
+            free(left_envi);
             envi = envi->next;
         }
+        free(left_cmd);
         if (!valid_arg_without_output(cmd[ind]))
             ret = 1;
         ind++;

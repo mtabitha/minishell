@@ -13,5 +13,6 @@ int    pwd(char **cmd)//показать Чингизу
     ft_putstr_fd("\n", 1);
     if (!exc_sign)
         ft_putstr_fd("\n", 1);
+    free(buf);
     return (0);
 }

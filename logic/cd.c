@@ -86,6 +86,7 @@ int    cd(t_env *envi, char **cmd)
         cmd_exp[1] = ft_strjoin("PWD=", tmp_getcwd);
         export(ptr, cmd_exp);
         free(tmp_getcwd);
+        free(cmd_exp[1]);
     }
     return(ret);
 }

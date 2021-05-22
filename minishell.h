@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtabitha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aahri <aahri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/24 09:19:54 by mtabitha          #+#    #+#             */
-/*   Updated: 2021/04/24 09:19:56 by mtabitha         ###   ########.fr       */
+/*   Updated: 2021/05/17 18:11:36 by aahri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,4 +189,5 @@ char        *left_part(char *arr);
 int         cd(t_env *envi, char **cmd);
 int         valid_arg(char *cmd);
 int         has_exclamation_sign(char **cmd);
+int     	count_smbls(char *adr);
 #endif

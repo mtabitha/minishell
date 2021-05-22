@@ -26,7 +26,7 @@ int			count_new_unit_str(char *line, int i)
 			i++;
 		else if ((quote == ' ' || quote == '\"') &&
 					line[i] == '$' && !ft_strchr("$ ", line[i + 1]))
-			line[i] = -line[i];
+			line[i] = DOLLAR;
 		else if (line[i] == '\"' || line[i] == '\'')
 			count -= change_quote(line[i], &quote);
 		count++;
@@ -50,7 +50,11 @@ void 		parse_new_unit_str(char *line, char *new_str, int *i)
 			(*i)++;
 		}
 		else if (line[*i] == '\"' || line[*i] == '\'')
-			change_quote(line[(*i)++], &quote);
+		{
+			if (!change_quote(line[(*i)], &quote))
+				new_str[j++] = line[(*i)];
+			(*i)++;
+		}
 		else
 			new_str[j++] = line[(*i)++];
 	new_str[j] = 0;

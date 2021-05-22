@@ -56,9 +56,12 @@ int			change_quote(char ch, char *quote)
 	if (*quote == ' ')
 	{
 		*quote = ch;
-		return (2);
+		return (1);
 	}
 	else if (*quote == ch)
+	{
 		*quote = ' ';
+		return (1);
+	}
 	return (0);
 }

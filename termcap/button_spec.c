@@ -27,6 +27,7 @@ void	delete_last_hist(t_termcap *tmp)
 		ptr = list->prev;
 		ptr->next = NULL;
 	}
+	free(list->content);
 	free(list);
 }
 

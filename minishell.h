@@ -35,6 +35,7 @@
 # define IN   6
 # define PIPE 7
 # define END  8
+# define DOLLAR  -36
 
 # define UP 	"\x1b[A"
 # define DOWN 	"\x1b[B"

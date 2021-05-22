@@ -49,6 +49,7 @@ int		pipe_work(t_shell *shell)
 	shell->ch.pid = fork();
 	if (!shell->ch.pid)
 	{
+		init_ch(&shell->ch);
 		shell->main_proc = 0;
 		sig.main_proc = 0;
 		close(fd[1]);

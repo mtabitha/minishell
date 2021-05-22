@@ -84,7 +84,8 @@ int			exec_execve(t_env *env, char **argv, char **envp)
 {
 	int		ret;
 	char	*filename;
-
+	
+	ret = 0;
 	sig.pid = fork();
 	if (!sig.pid)
 	{

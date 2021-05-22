@@ -49,7 +49,7 @@ void		run(t_shell *shell)
 		init_std(shell);
 		waitpid(-1, &shell->ch.status, 0);
 		shell->ch.ret = WEXITSTATUS(shell->ch.status);
-		if (shell->ch.ret)
+		if (shell->ch.pid != -1)
 		{
 			shell->ret = shell->ch.ret;
 			shell->last_ret = shell->ch.ret;

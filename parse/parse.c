@@ -89,6 +89,7 @@ t_unit		*parse(t_shell *shell)
 	updated_path = changing_tilda();
 	ft_putstr_fd(updated_path, 2);
 	ft_putstr_fd(" minishell > ", 1);
+	free(updated_path);
 	set_flag(&shell->tmp, &shell->term);
 	line = ft_strdup(termcap(&shell->tmp));
 	reset_flag(&shell->term);

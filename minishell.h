@@ -190,4 +190,5 @@ int         cd(t_env *envi, char **cmd);
 int         valid_arg(char *cmd);
 int         has_exclamation_sign(char **cmd);
 int     	count_smbls(char *adr);
+char *changing_tilda(void);
 #endif

@@ -14,6 +14,8 @@
 
 t_unit		*prev_type(t_unit *unit)
 {
+	if (unit->type > FILE)
+		return (NULL);
 	while (unit && unit->type < TRUNK)
 		unit = unit->prev;
 	return (unit);

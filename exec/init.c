@@ -21,9 +21,15 @@ void		init_ch(t_child *ch)
 
 void		init_pr(t_shell *shell)
 {
+	shell->in = dup(0);
+	shell->out = dup(1);
 	shell->ret = 0;
 	shell->last_ret = 0;
 	shell->main_proc = 1;
+	init_ch(&shell->ch);
+	init_termcap(&shell->tmp);
+	init_fd(shell);
+	init_sig();
 }
 
 void		init_std(t_shell *shell)

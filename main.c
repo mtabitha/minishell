@@ -47,7 +47,7 @@ void		run(t_shell *shell)
 		close_fd(shell);
 		init_fd(shell);
 		init_std(shell);
-		waitpid(-1, &shell->ch.status, 0);
+		wait(&shell->ch.status);
 		shell->ch.ret = WEXITSTATUS(shell->ch.status);
 		if (shell->ch.pid != -1)
 		{
@@ -66,18 +66,12 @@ int			main(int argc, char *argv[], char **env)
 	(void)argc;
 	(void)argv;
     t_shell	shell;
-	shell.in = dup(0);
-	shell.out = dup(1);
 
 	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, handle_sigquit);
 	set_envs(&shell.env, env);
 	set_shlvl(shell.env);
 	init_pr(&shell);
-	init_ch(&shell.ch);
-	init_termcap(&shell.tmp);
-	init_fd(&shell);
-	init_sig();
 	while (1)
 	{
 		shell.recurs_exit = 0;

@@ -16,7 +16,7 @@ void	trunk_append(t_shell *shell, t_unit *unit)
 {
 	if (shell->fdout > 0)
 		close(shell->fdout);
-	if (unit->prev->type == TRUNK)
+	if (!unit->prev || unit->prev->type == TRUNK)
 		shell->fdout = open(unit->str, O_CREAT | O_WRONLY | O_TRUNC, S_IRWXU);
 	else
 		shell->fdout = open(unit->str, O_CREAT | O_WRONLY | O_APPEND, S_IRWXU);

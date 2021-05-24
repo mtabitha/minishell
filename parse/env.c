@@ -12,7 +12,7 @@
 
 #include "../minishell.h"
 
-void		set_envs(t_env **mini_env, char **bash_env)
+void	set_envs(t_env **mini_env, char **bash_env)
 {
 	t_env	*env;
 	t_env	*next;
@@ -20,14 +20,16 @@ void		set_envs(t_env **mini_env, char **bash_env)
 
 	i = 0;
 	next = NULL;
-	if (!(env = (t_env *)malloc(sizeof(t_env))))
+	env = (t_env *)malloc(sizeof(t_env));
+	if (!env)
 		return ;
 	env->next = NULL;
 	env->str = ft_strdup(bash_env[i]);
 	*mini_env = env;
 	while (bash_env && bash_env[++i])
 	{
-		if (!(next = (t_env *)malloc(sizeof(t_env))))
+		next = (t_env *)malloc(sizeof(t_env));
+		if (!next)
 			return ;
 		next->str = ft_strdup(bash_env[i]);
 		next->next = NULL;
@@ -36,7 +38,7 @@ void		set_envs(t_env **mini_env, char **bash_env)
 	}
 }
 
-t_env		*get_env(char *type, t_env *env)
+t_env	*get_env(char *type, t_env *env)
 {
 	while (env)
 	{
@@ -47,7 +49,7 @@ t_env		*get_env(char *type, t_env *env)
 	return (NULL);
 }
 
-char		*get_env_val(t_env *env)
+char	*get_env_val(t_env *env)
 {
 	int		i;
 

@@ -143,7 +143,7 @@ void		ft_free(char **ptr);
 int			count_el(char **ptr);
 
 char	*termcap(t_termcap *tmp);
-void	set_flag(t_termcap *tmp, struct termios *term);
+int		set_flag(t_termcap *tmp, struct termios *term);
 void	reset_flag(struct termios *term);
 void	init_termcap(t_termcap *tmp);
 
@@ -173,6 +173,8 @@ void		init_ch(t_child *ch);
 void		init_pr(t_shell *shell);
 void		init_std(t_shell *shell);
 void		init_fd(t_shell *shell);
+void		print_minishell(void);
+int	empty_line(char *line);
 
 int         built_in_cmd(char **cmd, t_env *envi);
 void        ft_lstadd_back(t_env **lst, t_env *new);

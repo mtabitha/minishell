@@ -16,7 +16,7 @@ void	write_history(t_termcap *tmp, char *line)
 {
 	tmp->max = ft_strlen(line);
 	tmp->pos = tmp->max;
-    write(1, line, tmp->max);
+	write(1, line, tmp->max);
 }
 
 void	button_up(t_termcap *tmp)

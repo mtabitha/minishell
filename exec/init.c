@@ -12,14 +12,14 @@
 
 #include "../minishell.h"
 
-void		init_ch(t_child *ch)
+void	init_ch(t_child *ch)
 {
 	ch->pid = -1;
 	ch->ret = 0;
 	ch->status = 0;
 }
 
-void		init_pr(t_shell *shell)
+void	init_pr(t_shell *shell)
 {
 	shell->in = dup(0);
 	shell->out = dup(1);
@@ -32,13 +32,13 @@ void		init_pr(t_shell *shell)
 	init_sig();
 }
 
-void		init_std(t_shell *shell)
+void	init_std(t_shell *shell)
 {
 	dup2(shell->in, 0);
 	dup2(shell->out, 1);
 }
 
-void		init_fd(t_shell *shell)
+void	init_fd(t_shell *shell)
 {
 	shell->pipeout = -1;
 	shell->pipein = -1;

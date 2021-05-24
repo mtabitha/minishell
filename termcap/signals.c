@@ -12,10 +12,9 @@
 
 #include "../minishell.h"
 
-void		handle_sigquit(int ret)
+void	handle_sigquit(int ret)
 {
 	(void)ret;
-	
 	if (sig.pid != -1)
 	{
 		sig.ch_flagquit = 1;
@@ -26,11 +25,9 @@ void		handle_sigquit(int ret)
 	}
 }
 
-void		handle_sigint(int ret)
+void	handle_sigint(int ret)
 {
 	(void)ret;
-	char	*path;
-
 	if (sig.pid != -1)
 	{
 		sig.ch_flagint = 1;
@@ -42,14 +39,11 @@ void		handle_sigint(int ret)
 		sig.flagint = 1;
 		sig.exit = 1;
 		write(2, "\n", 2);
-		path = changing_tilda();
-		ft_putstr_fd(path, 2);
-		ft_putstr_fd(" minishell > ", 2);
-		free(path);
+		print_minishell();
 	}
 }
 
-void		init_sig(void)
+void	init_sig(void)
 {
 	sig.exit = 0;
 	sig.pid = -1;

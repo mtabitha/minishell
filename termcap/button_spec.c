@@ -20,7 +20,7 @@ void	delete_last_hist(t_termcap *tmp)
 	if (tmp->count_hist < 15)
 		return ;
 	list = tmp->first;
-	while(list && list->next)
+	while (list && list->next)
 		list = list->next;
 	if (list->prev)
 	{
@@ -31,20 +31,10 @@ void	delete_last_hist(t_termcap *tmp)
 	free(list);
 }
 
-int		empty_line(char *line)
-{
-	while (line && *line)
-		if (*line != ' ' || *line != '\t')
-			return (0);
-		else
-			line++;
-	return (1);
-}
-
 char	*button_enter(t_termcap *tmp)
 {
 	write(1, "\n", 1);
-	if (empty_line(tmp->new->content) && !tmp->in_hist )
+	if (empty_line(tmp->new->content) && !tmp->in_hist)
 	{
 		free(tmp->new->content);
 		return (NULL);

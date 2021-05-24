@@ -12,7 +12,7 @@
 
 #include "../minishell.h"
 
-int 		shlvl_valid(char *nbr)
+int 	shlvl_valid(char *nbr)
 {
 	int		count;
 	int		i;
@@ -37,7 +37,7 @@ int 		shlvl_valid(char *nbr)
 	return (1);
 }
 
-void		set_shlvl(t_env *env)
+void	set_shlvl(t_env *env)
 {
 	int		nbr;
 	char	*arr_nbr;
@@ -52,7 +52,7 @@ void		set_shlvl(t_env *env)
 		nbr = ft_atoi(arr_nbr) + 1;
 	free(arr_nbr);
 	free(env->str);
-	arr_nbr =  ft_itoa(nbr);
+	arr_nbr = ft_itoa(nbr);
 	env->str = ft_strjoin("SHLVL=", arr_nbr);
 	free(arr_nbr);
 }

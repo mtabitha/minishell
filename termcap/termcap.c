@@ -20,9 +20,9 @@ void	clean_buf(char *buf)
 
 void	delete_ch(char **buf, int pos)
 {
-	int len;
+	int	len;
 
-	len = ft_strlen(*buf);	
+	len = ft_strlen(*buf);
 	(*buf)[pos] = 0;
 	if (len == pos)
 		return ;
@@ -31,9 +31,10 @@ void	delete_ch(char **buf, int pos)
 
 void	add_ch(char **buf, int pos, char *str)
 {
-	int len;
-	char 	*ptr;
-	len = ft_strlen(*buf);	
+	int		len;
+	char	*ptr;
+
+	len = ft_strlen(*buf);
 	if (len == pos)
 	{
 		*buf = ft_strjoin_for_gnl(*buf, str);
@@ -55,17 +56,17 @@ void	button_eof(t_termcap *tmp)
 		exit(0);
 	}
 	else
-		write(1,"\a",1);
+		write(1, "\a", 1);
 }
 
 char	*termcap(t_termcap *tmp)
 {
 	while (1)
-    {
+	{
 		button_read(tmp);
-        if (!ft_strcmp(tmp->buf, ENTER))
+		if (!ft_strcmp(tmp->buf, ENTER))
 			return (button_enter(tmp));
-        else if (!ft_strcmp(tmp->buf, UP))
+		else if (!ft_strcmp(tmp->buf, UP))
 			button_up(tmp);
 		else if (!ft_strcmp(tmp->buf, DOWN))
 			button_down(tmp);
@@ -77,8 +78,8 @@ char	*termcap(t_termcap *tmp)
 			button_back(tmp);
 		else if (!ft_strcmp(tmp->buf, END_L))
 			button_eof(tmp);
-	    else 
+		else
 			button_insert(tmp);
-    }
+	}
 	return (tmp->first->content);
 }

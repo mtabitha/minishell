@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-t_unit		*null_or_end(t_unit *unit)
+t_unit	*null_or_end(t_unit *unit)
 {
 	while (unit && unit->type < END)
 		unit = unit->next;
@@ -21,13 +21,13 @@ t_unit		*null_or_end(t_unit *unit)
 	return (unit);
 }
 
-void		fd_close(int fd)
+void	fd_close(int fd)
 {
 	if (fd > 0)
 		close(fd);
 }
 
-void		close_fd(t_shell *shell)
+void	close_fd(t_shell *shell)
 {
 	fd_close(shell->fdin);
 	fd_close(shell->fdout);
@@ -35,7 +35,7 @@ void		close_fd(t_shell *shell)
 	fd_close(shell->pipeout);
 }
 
-void		run(t_shell *shell)
+void	run(t_shell *shell)
 {
 	t_unit	*unit;
 
@@ -61,12 +61,12 @@ void		run(t_shell *shell)
 	}
 }
 
-int			main(int argc, char *argv[], char **env)
+int	main(int argc, char *argv[], char **env)
 {
+	t_shell	shell;
+
 	(void)argc;
 	(void)argv;
-    t_shell	shell;
-
 	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, handle_sigquit);
 	set_envs(&shell.env, env);
@@ -78,7 +78,7 @@ int			main(int argc, char *argv[], char **env)
 		shell.first = parse(&shell);
 		if (shell.first)
 			run(&shell);
-		free_units(shell.first);	
+		free_units(shell.first);
 	}
 	return (shell.ret);
 }

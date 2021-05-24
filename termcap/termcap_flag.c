@@ -12,27 +12,32 @@
 
 #include "../minishell.h"
 
-void	set_flag(t_termcap *tmp, struct termios *term)
+int	set_flag(t_termcap *tmp, struct termios *term)
 {
-	char *term_name;
+	char	*term_name;
 
 	term_name = getenv("TERM");
-    tcgetattr(0, term);
-    term->c_lflag &= ~(ICANON);
-    term->c_lflag &= ~(ECHO);
-    tcsetattr(0, TCSANOW, term);
-    tgetent(0, term_name);
+	if (tcgetattr(0, term) < 0)
+		return (1);
+	term->c_lflag &= ~(ICANON);
+	term->c_lflag &= ~(ECHO);
+	if (tcsetattr(0, TCSANOW, term) < 0)
+		return (1);
+	tgetent(0, term_name);
 	tputs(save_cursor, 1, ft_putchar);
 	tmp->pos = 0;
 	tmp->max = 0;
 	tmp->new = (t_list *)malloc(sizeof(t_list));
+	if (!tmp->new)
+		return (1);
 	tmp->new->content = ft_strdup("");
+	return (0);
 }
 
 void	reset_flag(struct termios *term)
 {
 	term->c_lflag |= ICANON;
-    term->c_lflag |= ECHO;
+	term->c_lflag |= ECHO;
 	tcsetattr(0, TCSANOW, term);
 }
 

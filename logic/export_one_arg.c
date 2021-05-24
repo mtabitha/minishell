@@ -38,6 +38,7 @@ void    sorting_env(t_env *envi_dup)
 void    output_sorted_env(t_env *envi, char **split_strs)
 {
     int i;
+    char *ptr;
 
     while (envi)
     {
@@ -49,13 +50,9 @@ void    output_sorted_env(t_env *envi, char **split_strs)
         if (split_strs[1] || has_equal(envi->str))
         {
             ft_putstr_fd("=\"", 1);
-            while (split_strs[i])
-            {
-                ft_putstr_fd(split_strs[i], 1);
-                if (split_strs[i + 1])
-                    ft_putstr_fd("=", 1);
-                i++;
-            }
+            ptr = ft_strchr(envi->str, '=');
+            ptr++;
+            ft_putstr_fd(ptr, 1);
             ft_putstr_fd("\"", 1);
         }
         ft_putstr_fd("\n", 1);

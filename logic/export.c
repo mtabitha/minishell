@@ -52,7 +52,7 @@ int    cmp_unit_env(char **cmd, t_env *envi, char *left_cmd)
 
     ind = 0;
     time = envi;
-
+    // printf("\n\n\n\n\n\nRuslan   \n\n\n\n\n\n");
     while (envi)
     {
         left_envi = left_part(envi->str);

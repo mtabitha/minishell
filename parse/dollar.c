@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dollar.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtabitha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aahri <aahri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 17:14:21 by mtabitha          #+#    #+#             */
-/*   Updated: 2021/04/29 17:14:22 by mtabitha         ###   ########.fr       */
+/*   Updated: 2021/05/26 21:21:57 by aahri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ char	*set_dollar(char *str, int *i, int type)
 	if (type)
 		(*i)++;
 	line = (char *)malloc(sizeof(char) * (count_dollar(str, *i, type) + 1));
+	memory_allocated(line);
 	if (!line)
 		return (NULL);
 	while (!type && str[*i] && str[*i] != DOLLAR)

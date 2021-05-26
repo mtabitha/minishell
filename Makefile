@@ -34,7 +34,8 @@ LOGIC_SRCS = built_in.c\
 			cd.c\
 			utils_cd.c\
 			delete_lst.c\
-			lstdup.c
+			lstdup.c\
+			memory.c
 
 EXEC_SRCS = init.c \
 			redir_pipe.c \

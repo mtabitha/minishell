@@ -6,7 +6,7 @@
 /*   By: aahri <aahri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/17 13:05:36 by mtabitha          #+#    #+#             */
-/*   Updated: 2021/05/26 20:36:22 by aahri            ###   ########.fr       */
+/*   Updated: 2021/05/26 21:19:34 by aahri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ char	*get_changed_path(char *home, char *cwd)
 	len_home = ft_strlen(home);
 	len_cwd = ft_strlen(cwd);
 	changed_path = (char *)malloc(sizeof(char) * (len_cwd - len_home + 2));
+	memory_allocated(changed_path);
 	changed_path[len_cwd - len_home + 1] = 0;
 	changed_path[0] = '~';
 	while (cwd[len_home])

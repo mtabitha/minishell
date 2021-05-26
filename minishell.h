@@ -6,7 +6,7 @@
 /*   By: aahri <aahri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/24 09:19:54 by mtabitha          #+#    #+#             */
-/*   Updated: 2021/05/26 17:27:06 by aahri            ###   ########.fr       */
+/*   Updated: 2021/05/26 21:29:41 by aahri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@
 # include <signal.h>
 # include <sys/types.h>
 # include <dirent.h>
+# include <errno.h>
+# include <sys/stat.h>
 
 # define ETY  0
 # define CMD  1
@@ -210,4 +212,5 @@ void		output_mistake_cd(char *str1, char *str2, char *str3);
 int     	info_mistake(char *cmd);
 void		delete_lst(t_env *envi_dup);
 void		lstdup(t_env **envi_dup, t_env *envi);
+void		memory_allocated(char *memory);
 #endif

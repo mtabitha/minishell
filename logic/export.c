@@ -26,6 +26,7 @@ char	*left_part(char *arr)
 	while (arr[len] && arr[len] != '=')
 		len++;
 	str = (char *)malloc(sizeof(char) * (len + 1));
+	memory_allocated(str);
 	str[len] = 0;
 	len--;
 	while (len >= 0)

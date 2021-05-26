@@ -6,12 +6,11 @@
 /*   By: aahri <aahri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/25 15:56:10 by aahri             #+#    #+#             */
-/*   Updated: 2021/05/25 20:52:34 by aahri            ###   ########.fr       */
+/*   Updated: 2021/05/26 21:29:01 by aahri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-#include <errno.h>
 #include <string.h>
 
 int	close_fd_dir(int fd, DIR *dir)

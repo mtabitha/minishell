@@ -6,14 +6,11 @@
 /*   By: aahri <aahri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/25 20:58:21 by aahri             #+#    #+#             */
-/*   Updated: 2021/05/26 20:22:29 by aahri            ###   ########.fr       */
+/*   Updated: 2021/05/26 22:55:39 by aahri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
 
 int	has_equal(char *str)
 {
@@ -26,7 +23,7 @@ int	has_equal(char *str)
 	return (0);
 }
 
-void	free_double_mass(char **split_path)
+int	free_double_mass(char **split_path, int nbr)
 {
 	int	ind;
 
@@ -40,6 +37,21 @@ void	free_double_mass(char **split_path)
 		}
 		free(split_path);
 	}
+	if (!nbr)
+		return (1);
+	return (0);
+}
+
+int	processing_errno(int nbr)
+{
+	if (errno == ENOENT)
+	{
+		nbr = -1;
+		errno = 0;
+	}
+	else
+		nbr = 0;
+	return (nbr);
 }
 
 int	got_file_from_home(t_env *envi, int ind, int nbr, char *joined_path)
@@ -63,10 +75,7 @@ int	got_file_from_home(t_env *envi, int ind, int nbr, char *joined_path)
 		}
 		envi = envi->next;
 	}
-	free_double_mass(split_path);
-	if (!nbr)
-		return (1);
-	return (0);
+	return (free_double_mass(split_path, nbr));
 }
 
 int	env(t_env *envi, char **unit)

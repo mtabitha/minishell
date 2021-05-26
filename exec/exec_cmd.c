@@ -42,7 +42,7 @@ void	exec_cmd(t_shell *shell, t_unit *unit)
 	if (has_build_in(argv))
 		shell->ret = built_in_cmd(argv, shell->env);
 	else
-		shell->ret = exec_execve(shell->env, argv, envp);
+		shell->ret = exec_execve(shell, argv, envp);
 	shell->last_ret = shell->ret;
 	if (sig.ch_flagint || sig.ch_flagquit)
 	{

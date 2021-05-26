@@ -21,6 +21,7 @@ void	init_ch(t_child *ch)
 
 void	init_pr(t_shell *shell)
 {
+	shell->exit = 0;
 	shell->in = dup(0);
 	shell->out = dup(1);
 	shell->ret = 0;

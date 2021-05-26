@@ -39,7 +39,7 @@ int	print_error(char *filename, t_env *env)
 	dir = opendir(filename);
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(filename, 2);
-	if (!ft_strchr(filename, '/') && get_env("PATH=", env))
+	if (!ft_strchr(filename, '/') && get_env("PATH", env))
 		ft_putstr_fd(": command not found\n", 2);
 	else
 		ret_error(&ret, fd, dir);
@@ -71,7 +71,7 @@ int	its_minishell(char *filename)
 	return (0);
 }
 
-int	exec_execve(t_env *env, char **argv, char **envp)
+int	exec_execve(t_shell *shell, char **argv, char **envp)
 {
 	int		ret;
 	char	*filename;
@@ -83,10 +83,11 @@ int	exec_execve(t_env *env, char **argv, char **envp)
 	sig.pid = fork();
 	if (!sig.pid)
 	{
-		if (!ft_strchr(filename, '/') && get_env("PATH=", env))
-			check_filename(filename, env, argv, envp);
-		execve(filename, argv, envp);
-		ret = print_error(filename, env);
+		if (!ft_strchr(filename, '/') && get_env("PATH", shell->env))
+			check_filename(filename, shell->env, argv, envp);
+		else
+			execve(filename, argv, envp);
+		ret = print_error(filename, shell->env);
 		exit(ret);
 	}	
 	else

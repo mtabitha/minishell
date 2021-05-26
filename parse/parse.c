@@ -56,16 +56,33 @@ void	print_minishell(void)
 	free(path);
 }
 
-t_unit	*parse(t_shell *shell)
+char	*fd_or_std(t_shell *shell)
 {
 	char	*line;
 
 	line = NULL;
-	print_minishell();
 	if (set_flag(&shell->tmp, &shell->term))
-		return (NULL);
-	line = ft_strdup(termcap(&shell->tmp));
-	reset_flag(&shell->term);
+	{
+		if (!get_next_line(0, &line))
+		{
+			shell->exit = 1;
+			close(0);
+		}
+	}
+	else
+	{
+		print_minishell();
+		line = ft_strdup(termcap(&shell->tmp));
+		reset_flag(&shell->term);
+	}
+	return (line);
+}
+
+t_unit	*parse(t_shell *shell)
+{
+	char	*line;
+
+	line = fd_or_std(shell);
 	if (sig.flagint)
 		shell->last_ret = sig.exit;
 	if (quote_err(line) || !line)

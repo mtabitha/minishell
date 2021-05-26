@@ -63,6 +63,7 @@ void	button_eof(t_termcap *tmp)
 
 char	*termcap(t_termcap *tmp)
 {
+	tputs(save_cursor, 1, ft_putchar);
 	while (1)
 	{
 		button_read(tmp);

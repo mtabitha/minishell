@@ -71,7 +71,7 @@ int	main(int argc, char *argv[], char **env)
 	set_envs(&shell.env, env);
 	set_shlvl(shell.env);
 	init_pr(&shell);
-	while (1)
+	while (shell.exit == 0)
 	{
 		shell.recurs_exit = 0;
 		shell.first = parse(&shell);

@@ -90,6 +90,7 @@ typedef struct		s_child
 
 typedef struct		s_shell
 {
+	int				exit;
 	int				recurs_exit;
 	int				pipein;
 	int				pipeout;
@@ -169,7 +170,7 @@ char		**create_env_mass(t_env *env);
 
 void		redir_pipe(t_shell *shell, t_unit *unit);
 void		exec_cmd(t_shell *shell, t_unit *unit);
-int			exec_execve(t_env *env, char **argv, char **envp);
+int			exec_execve(t_shell *shell, char **argv, char **envp);
 
 void		trunk_append(t_shell *shell, t_unit *unit);
 void		in(t_shell *shell, t_unit *unit);

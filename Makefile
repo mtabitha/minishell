@@ -37,16 +37,19 @@ EXEC_SRCS = init.c \
 			redir_pipe.c \
 			exec_cmd.c \
 			exec_execve.c \
+			redir_pipe_work.c \
+			main.c \
+			create_argv_envp.c \
 			utils.c
 
 INC = ./minishell.h
 LIBFT_A = $(LIBFT_P)libft.a
 LIBFT_P = ./libft/
-NAME = minishell.a
+NAME = minishell
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -g -I$(INC) 
+CFLAGS = -g -Wall -Wextra -Werror -I $(INC)
 
-OBJS = $(PARS_OBJS:.c=.o) $(TERM_OBJS:.c=.o)  $(EXEC_OBJS:.c=.o) $(LOGIC_OBJS:.c=.o)
+OBJS = $(PARS_OBJS:.c=.o) $(TERM_OBJS:.c=.o) $(EXEC_OBJS:.c=.o) $(LOGIC_OBJS:.c=.o)
 
 PARS_OBJS =	$(addprefix $(PARS_P), $(PARS_SRCS))
 TERM_OBJS =	$(addprefix $(TERM_P), $(TERM_SRCS))
@@ -55,11 +58,9 @@ EXEC_OBJS = $(addprefix $(EXEC_P), $(EXEC_SRCS))
 
 all : $(NAME)
 
-$(NAME) : $(OBJS) main.c
-		make -C ./libft
-		mv $(LIBFT_A) $(NAME)
-		ar rcs $(NAME) $(OBJS)
-		$(CC) -g main.c $(NAME) -o minishell -ltermcap
+$(NAME) : $(OBJS)
+		make -C libft
+		$(CC) $(CFLAGS) -o $(NAME) $(OBJS) libft/libft.a -ltermcap
 
 %.o: %.c $(INC)
 	$(CC) $(CFLAGS) -c $< -o $@ 

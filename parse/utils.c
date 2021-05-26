@@ -12,7 +12,7 @@
 
 #include "../minishell.h"
 
-void		free_null(char **ptr)
+void	free_null(char **ptr)
 {
 	if (ptr && *ptr != NULL)
 	{
@@ -21,7 +21,7 @@ void		free_null(char **ptr)
 	}
 }
 
-void		ft_free(char **ptr)
+void	ft_free(char **ptr)
 {
 	int		i;
 
@@ -33,9 +33,9 @@ void		ft_free(char **ptr)
 	free(ptr);
 }
 
-int			count_el(char **ptr)
+int	count_el(char **ptr)
 {
-	int		n;
+	int	n;
 
 	n = 0;
 	if (!ptr)
@@ -45,13 +45,13 @@ int			count_el(char **ptr)
 	return (n);
 }
 
-void		space_skip(char *line, int *i)
+void	space_skip(char *line, int *i)
 {
 	while (line[*i] == ' ')
 		(*i)++;
 }
 
-int			change_quote(char ch, char *quote)
+int	change_quote(char ch, char *quote)
 {
 	if (*quote == ' ')
 	{

@@ -12,9 +12,9 @@
 
 #include "../minishell.h"
 
-int			count_dollar(char *str, int i, int type)
+int	count_dollar(char *str, int i, int type)
 {
-	int		count;
+	int	count;
 
 	count = 0;
 	while (!type && str[i] && str[i] != DOLLAR)
@@ -22,7 +22,8 @@ int			count_dollar(char *str, int i, int type)
 		count++;
 		i++;
 	}
-	while (type && str[i] && str[i] != DOLLAR && str[i] != ' ')
+	while (type && str[i] && str[i] != DOLLAR
+		&& !(str[i] >= ' ' && str[i] <= '/'))
 	{
 		count++;
 		i++;
@@ -30,7 +31,7 @@ int			count_dollar(char *str, int i, int type)
 	return (count);
 }
 
-char		*set_dollar(char *str, int *i, int type)
+char	*set_dollar(char *str, int *i, int type)
 {
 	char	*line;
 	int		j;
@@ -38,18 +39,19 @@ char		*set_dollar(char *str, int *i, int type)
 	j = 0;
 	if (type)
 		(*i)++;
-	if (!(line = (char *)malloc(sizeof(char) *
-			(count_dollar(str, *i, type) + 1))))
+	line = (char *)malloc(sizeof(char) * (count_dollar(str, *i, type) + 1));
+	if (!line)
 		return (NULL);
 	while (!type && str[*i] && str[*i] != DOLLAR)
 		line[j++] = str[(*i)++];
-	while (type && str[*i] && str[*i] != DOLLAR && str[*i] != ' ')
+	while (type && str[*i] && str[*i] != DOLLAR
+		&& !(str[*i] >= ' ' && str[*i] <= '/'))
 		line[j++] = str[(*i)++];
 	line[j] = 0;
-	return(line);
+	return (line);
 }
 
-char		*env_dollar(char *str, int *i, t_env *env)
+char	*env_dollar(char *str, int *i, t_env *env)
 {
 	char	*type;
 	char	*line;
@@ -61,10 +63,10 @@ char		*env_dollar(char *str, int *i, t_env *env)
 	return (line);
 }
 
-char		*parse_dollar(char *str, t_shell *shell)
+char	*parse_dollar(char *str, t_shell *shell)
 {
 	char	*new_str;
-	char 	*line;
+	char	*line;
 	int		i;
 
 	i = 0;
@@ -73,10 +75,12 @@ char		*parse_dollar(char *str, t_shell *shell)
 	while (str[i])
 	{
 		if (str[i] == DOLLAR)
-			if (str[i + 1] == '?' && (i += 2))
+		{
+			if (its_ret(str, &i))
 				line = ft_itoa(shell->last_ret);
-			else 
+			else
 				line = env_dollar(str, &i, shell->env);
+		}
 		else
 			line = set_dollar(str, &i, 0);
 		new_str = ft_strjoin_for_gnl(new_str, line);
@@ -86,7 +90,7 @@ char		*parse_dollar(char *str, t_shell *shell)
 	return (new_str);
 }
 
-void		dollar(t_unit *unit, t_shell *shell)
+void	dollar(t_unit *unit, t_shell *shell)
 {
 	while (unit)
 	{

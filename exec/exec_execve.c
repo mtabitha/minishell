@@ -12,54 +12,27 @@
 
 #include "../minishell.h"
 
-char		**take_path(t_env *envi)
+void	ret_error(int *ret, int fd, DIR *dir)
 {
-	char **path;
-	char *tmp;
-	
-	path = NULL;
-	while (envi)
+	if (fd == -1 && dir != NULL)
 	{
-		if (!ft_strncmp("PATH=", envi->str, 5))
-		{
-			path = ft_split_str(&envi->str[5], ":");
-			int i = 0;
-			while (path[i])
-			{
-				tmp = path[i];
-				path[i] = ft_strjoin(path[i], "/");
-				free(tmp);
-				i++;
-			}		
-		}
-		envi = envi->next;
+		*ret = 126;
+		ft_putstr_fd(": is a directory\n", 2);
 	}
-	return (path);
+	else if (fd != -1 && dir == NULL)
+	{
+		*ret = 126;
+		ft_putstr_fd(": Permission denied\n", 2);
+	}
+	else
+		ft_putstr_fd(": No such file or directory\n", 2);
 }
 
-void			check_exist_file(char *filename, t_env *env, char **argv)
+int	print_error(char *filename, t_env *env)
 {
-	char	**env_mass;
-	char	**path;
-	char	*cmd;
-	int 	i;
-
-	i = 0;
-	env_mass = create_env_mass(env);
-	path = take_path(env);
-	while(path && path[i])
-	{
-		cmd = ft_strjoin_for_gnl(path[i++], filename);
-		execve(cmd, argv, env_mass);
-		free(cmd);
-	}
-}
-
-int		print_error(char *filename, t_env *env)
-{
-	int		ret;
-	DIR		*dir;
-	int		fd;
+	int	ret;
+	DIR	*dir;
+	int	fd;
 
 	ret = 127;
 	fd = open(filename, O_RDWR);
@@ -68,35 +41,57 @@ int		print_error(char *filename, t_env *env)
 	ft_putstr_fd(filename, 2);
 	if (!ft_strchr(filename, '/') && get_env("PATH=", env))
 		ft_putstr_fd(": command not found\n", 2);
-	else if (fd == -1 && dir != NULL  && (ret = 126))
-		ft_putstr_fd(": is a directory\n", 2);
-	else if (fd != -1 && dir == NULL && (ret = 126))
-		ft_putstr_fd(": Permission denied\n", 2);
 	else
-		ft_putstr_fd(": No such file or directory\n", 2);
+		ret_error(&ret, fd, dir);
 	if (dir)
 		closedir(dir);
 	close(fd);
 	return (ret);
 }
 
-int			exec_execve(t_env *env, char **argv, char **envp)
+int	its_minishell(char *filename)
+{
+	char	*ptr;
+
+	ptr = ft_strchr(filename, '/');
+	if (!ptr)
+		return (0);
+	ptr++;
+	while (ptr)
+	{
+		if (!ft_strchr(ptr, '/'))
+		{
+			if (!(ft_strcmp("minishell", ptr)))
+				return (1);
+			else
+				return (0);
+		}
+		ptr = ft_strchr(ptr, '/') + 1;
+	}
+	return (0);
+}
+
+int	exec_execve(t_env *env, char **argv, char **envp)
 {
 	int		ret;
 	char	*filename;
-	
+
 	ret = 0;
+	filename = ft_strdup(*argv);
+	if (its_minishell(filename))
+		off_signal();
 	sig.pid = fork();
 	if (!sig.pid)
 	{
-		filename = ft_strdup(*argv);
 		if (!ft_strchr(filename, '/') && get_env("PATH=", env))
-			check_exist_file(filename, env, argv);
+			check_filename(filename, env, argv, envp);
 		execve(filename, argv, envp);
 		ret = print_error(filename, env);
 		exit(ret);
 	}	
 	else
 		waitpid(sig.pid, &ret, 0);
+	on_signal();
+	free(filename);
 	return (WEXITSTATUS(ret));
 }

@@ -142,39 +142,48 @@ void		free_null(char **ptr);
 void		ft_free(char **ptr);
 int			count_el(char **ptr);
 
-char	*termcap(t_termcap *tmp);
-int		set_flag(t_termcap *tmp, struct termios *term);
-void	reset_flag(struct termios *term);
-void	init_termcap(t_termcap *tmp);
+char		*termcap(t_termcap *tmp);
+int			set_flag(t_termcap *tmp, struct termios *term);
+void		reset_flag(struct termios *term);
+void		init_termcap(t_termcap *tmp);
 
-void	button_up(t_termcap *tmp);
-void	button_down(t_termcap *tmp);
-void	button_right(t_termcap *tmp);
-void	button_left(t_termcap *tmp);
-char	*button_enter(t_termcap *tmp);
-void	button_back(t_termcap *tmp);
-void	button_insert(t_termcap *tmp);
-void	button_read(t_termcap *tmp);
-void	delete_ch(char **buf, int pos);
-void	add_ch(char **buf, int pos, char *str);
+void		button_up(t_termcap *tmp);
+void		button_down(t_termcap *tmp);
+void		button_right(t_termcap *tmp);
+void		button_left(t_termcap *tmp);
+char		*button_enter(t_termcap *tmp);
+void		button_back(t_termcap *tmp);
+void		button_insert(t_termcap *tmp);
+void		button_read(t_termcap *tmp);
+void		delete_ch(char **buf, int pos);
+void		add_ch(char **buf, int pos, char *str);
 
 void		handle_sigquit(int ret);
 void		handle_sigint(int ret);
 void		init_sig(void);
-void	clean_buf(char *buf);
+void		clean_buf(char *buf);
 
+void		check_filename(char *filename, t_env *env, char **argv, char **envp);
+char		**create_argv(t_unit *unit);
 char		**create_env_mass(t_env *env);
-void	redir_pipe(t_shell *shell, t_unit *unit);
+
+void		redir_pipe(t_shell *shell, t_unit *unit);
 void		exec_cmd(t_shell *shell, t_unit *unit);
 int			exec_execve(t_env *env, char **argv, char **envp);
-t_unit		*next_type(t_unit *unit);
-t_unit		*prev_type(t_unit *unit);
+
+void		trunk_append(t_shell *shell, t_unit *unit);
+void		in(t_shell *shell, t_unit *unit);
+int			pipe_work(t_shell *shell);
+
 void		init_ch(t_child *ch);
 void		init_pr(t_shell *shell);
 void		init_std(t_shell *shell);
 void		init_fd(t_shell *shell);
 void		print_minishell(void);
-int	empty_line(char *line);
+int			empty_line(char *line);
+int			its_ret(char *str, int *i);
+void		off_signal(void);
+void		on_signal(void);
 
 int         built_in_cmd(char **cmd, t_env *envi);
 void        ft_lstadd_back(t_env **lst, t_env *new);
@@ -194,5 +203,5 @@ int         cd(t_env *envi, char **cmd);
 int         valid_arg(char *cmd);
 int         has_exclamation_sign(char **cmd);
 int     	count_smbls(char *adr);
-char *changing_tilda(void);
+char 		*changing_tilda(void);
 #endif

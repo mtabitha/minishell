@@ -41,6 +41,8 @@ void	add_ch(char **buf, int pos, char *str)
 		return ;
 	}
 	ptr = (char *)malloc(sizeof(char) * (len + 2));
+	if (!ptr)
+		return ;
 	ft_strlcpy(ptr, *buf, pos + 1);
 	ptr[pos] = str[0];
 	ft_strlcpy(&ptr[pos + 1], &(buf[0][pos]), len - pos + 1);

@@ -12,7 +12,7 @@
 
 #include "../minishell.h"
 
-int			count_new_unit_str(char *line, int i)
+int	count_new_unit_str(char *line, int i)
 {
 	int		count;
 	char	quote;
@@ -21,11 +21,11 @@ int			count_new_unit_str(char *line, int i)
 	quote = ' ';
 	while (line[i] && (line[i] != ' ' || quote != ' '))
 	{
-		if (line[i] == '\\' && (quote == ' ' || (quote == '\"'
-				&& ft_strchr("$\\\"", line[i + 1]))))
+		if (line[i] == '\\' && (quote == ' '
+				|| (quote == '\"' && ft_strchr("$\\\"", line[i + 1]))))
 			i++;
-		else if ((quote == ' ' || quote == '\"') &&
-					line[i] == '$' && !ft_strchr("$ ", line[i + 1]))
+		else if ((quote == ' ' || quote == '\"')
+			&& line[i] == '$' && !ft_strchr("$ ", line[i + 1]))
 			line[i] = DOLLAR;
 		else if (line[i] == '\"' || line[i] == '\'')
 			count -= change_quote(line[i], &quote);
@@ -35,7 +35,7 @@ int			count_new_unit_str(char *line, int i)
 	return (count);
 }
 
-void 		parse_new_unit_str(char *line, char *new_str, int *i)
+void	parse_new_unit_str(char *line, char *new_str, int *i)
 {
 	char	quote;
 	int		j;
@@ -43,8 +43,9 @@ void 		parse_new_unit_str(char *line, char *new_str, int *i)
 	j = 0;
 	quote = ' ';
 	while (line[*i] && (line[*i] != ' ' || quote != ' '))
-		if (line[*i] == '\\' && (quote == ' ' || (quote == '\"'
-				&& ft_strchr("$\\\"", line[*i + 1]))))
+	{
+		if (line[*i] == '\\' && (quote == ' '
+				|| (quote == '\"' && ft_strchr("$\\\"", line[*i + 1]))))
 		{
 			new_str[j++] = line[++(*i)];
 			(*i)++;
@@ -57,17 +58,18 @@ void 		parse_new_unit_str(char *line, char *new_str, int *i)
 		}
 		else
 			new_str[j++] = line[(*i)++];
+	}
 	new_str[j] = 0;
 }
 
-t_unit		*new_unit_str(char *line, int *i)
+t_unit	*new_unit_str(char *line, int *i)
 {
 	t_unit	*new;
 	char	*new_str;
 
-	if (!(new = (t_unit *)malloc(sizeof(t_unit))) ||
-			!(new_str = (char *)malloc(sizeof(char) *
-				(count_new_unit_str(line, *i) + 1))))
+	new = (t_unit *)malloc(sizeof(t_unit));
+	new_str = (char *)malloc(sizeof(char) * (count_new_unit_str(line, *i) + 1));
+	if (!new || !new_str)
 		return (NULL);
 	if (line[*i] == '\'' || line[*i] == '\"')
 		new->in_quote = 1;
@@ -78,7 +80,7 @@ t_unit		*new_unit_str(char *line, int *i)
 	return (new);
 }
 
-void		set_unit_type(t_unit *unit)
+void	set_unit_type(t_unit *unit)
 {
 	while (unit)
 	{
@@ -104,7 +106,7 @@ void		set_unit_type(t_unit *unit)
 	}	
 }
 
-t_unit		*set_units(char *line)
+t_unit	*set_units(char *line)
 {
 	t_unit	*unit;
 	t_unit	*next;

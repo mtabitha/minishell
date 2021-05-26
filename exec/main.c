@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 t_unit	*null_or_end(t_unit *unit)
 {
@@ -67,8 +67,7 @@ int	main(int argc, char *argv[], char **env)
 
 	(void)argc;
 	(void)argv;
-	signal(SIGINT, handle_sigint);
-	signal(SIGQUIT, handle_sigquit);
+	on_signal();
 	set_envs(&shell.env, env);
 	set_shlvl(shell.env);
 	init_pr(&shell);

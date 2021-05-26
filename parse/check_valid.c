@@ -12,9 +12,9 @@
 
 #include "../minishell.h"
 
-int		type_error(t_unit *unit)
+int	type_error(t_unit *unit)
 {
-	char 	*str;
+	char	*str;
 
 	str = "newline";
 	if (unit)
@@ -22,13 +22,13 @@ int		type_error(t_unit *unit)
 	ft_putstr_fd("minishell: syntax error near unexpected token `", 1);
 	ft_putstr_fd(str, 1);
 	ft_putstr_fd("\"", 1);
-	ft_putstr_fd("\n",1);
+	ft_putstr_fd("\n", 1);
 	return (1);
 }
 
-int			no_valid_unit(t_unit *unit)
+int	no_valid_unit(t_unit *unit)
 {
-	if (unit->next == NULL || (unit->next && unit->next->type != FILE))
+	if (!unit->next || (unit->next && unit->next->type != FILE))
 	{
 		if (unit->type == TRUNK)
 			return (type_error(unit->next));
@@ -37,7 +37,7 @@ int			no_valid_unit(t_unit *unit)
 		else if (unit->type == IN)
 			return (type_error(unit->next));
 	}
-	if (unit->prev == NULL || (unit->prev && unit->prev->type > FILE) || unit->next == NULL)
+	if (!unit->prev || (unit->prev && unit->prev->type > FILE) || !unit->next)
 	{
 		if (unit->type == PIPE)
 			return (type_error(unit));
@@ -47,7 +47,7 @@ int			no_valid_unit(t_unit *unit)
 	return (0);
 }
 
-t_unit		*free_units(t_unit *unit)
+t_unit	*free_units(t_unit *unit)
 {
 	t_unit	*ptr;
 
@@ -61,9 +61,9 @@ t_unit		*free_units(t_unit *unit)
 	return (NULL);
 }
 
-int		check_valid(t_unit *first)
+int	check_valid(t_unit *first)
 {
-	t_unit 	*unit;
+	t_unit	*unit;
 	int		flag;
 
 	flag = 0;

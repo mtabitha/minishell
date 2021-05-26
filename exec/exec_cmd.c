@@ -12,76 +12,26 @@
 
 #include "../minishell.h"
 
-int			count_argv(t_unit *unit)
-{
-	int		i;
-
-	i = 0;
-	while (unit && unit->type < PIPE)
-	{
-		if (unit->type < FILE)
-			i++;
-		unit = unit->next;
-	}
-	return (i);
-}
-
-char		**create_argv(t_unit *unit)
-{
-	char 	**cmd;
-	int		i;
-
-	i = 0;
-	cmd = (char **)malloc(sizeof(char *) * (count_argv(unit) + 1));
-	while (unit && unit->type < PIPE)
-	{
-		if (unit->type < FILE)
-			cmd[i++] = ft_strdup(unit->str);
-		unit = unit->next;
-	}
-	cmd[i] = NULL;
-	return (cmd);
-}
-
-char		**create_env_mass(t_env *env)
-{
-	char	*env_arr;
-	char	**env_mass;
-
-	env_arr = ft_strdup(env->str);
-	env_arr = ft_strjoin_for_gnl(env_arr, "\n");
-	env = env->next;
-	while(env)
-	{
-		env_arr = ft_strjoin_for_gnl(env_arr, env->str);
-		env_arr = ft_strjoin_for_gnl(env_arr, "\n");
-		env = env->next; 
-	}
-	env_mass = ft_split_str(env_arr, "\n");
-	free(env_arr);
-	return (env_mass);
-}
-
-int		has_build_in(char **cmd)
+int	has_build_in(char **cmd)
 {
 	if (!ft_strncmp(cmd[0], "echo", 4) && ft_strlen(cmd[0]) == 4)
-		return(1);
+		return (1);
 	else if (!ft_strncmp(cmd[0], "cd", 2) && ft_strlen(cmd[0]) == 2)
-		return(1);
+		return (1);
 	else if (!ft_strncmp(cmd[0], "pwd", 3) && ft_strlen(cmd[0]) == 3)
-		return(1);
+		return (1);
 	else if (!ft_strncmp(cmd[0], "export", 6) && ft_strlen(cmd[0]) == 6)
-		return(1);
+		return (1);
 	else if (!ft_strncmp(cmd[0], "unset", 5) && ft_strlen(cmd[0]) == 5)
-		return(1);
+		return (1);
 	else if (!ft_strncmp(cmd[0], "env", 3) && ft_strlen(cmd[0]) == 3)
-		return(1);
+		return (1);
 	else if (!ft_strncmp(cmd[0], "exit", 4) && ft_strlen(cmd[0]) == 4)
-		return(1);
+		return (1);
 	return (0);
 }
 
-void		exec_cmd(t_shell *shell, t_unit *unit)
+void	exec_cmd(t_shell *shell, t_unit *unit)
 {
 	char	**argv;
 	char	**envp;

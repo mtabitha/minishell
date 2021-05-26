@@ -12,6 +12,16 @@
 
 #include "../minishell.h"
 
+int	its_ret(char *str, int *i)
+{
+	if (str[*i + 1] == '?')
+	{
+		*i += 2;
+		return (1);
+	}
+	return (0);
+}
+
 void	set_envs(t_env **mini_env, char **bash_env)
 {
 	t_env	*env;

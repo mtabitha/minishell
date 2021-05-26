@@ -12,20 +12,16 @@
 
 #include "../minishell.h"
 
-t_unit		*prev_type(t_unit *unit)
+void	off_signal(void)
 {
-	if (unit->type > FILE)
-		return (NULL);
-	while (unit && unit->type < TRUNK)
-		unit = unit->prev;
-	return (unit);
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 }
 
-t_unit		*next_type(t_unit *unit)
+void	on_signal(void)
 {
-	while (unit && unit->type < TRUNK)
-		unit = unit->next;
-	return (unit);
+	signal(SIGINT, handle_sigint);
+	signal(SIGQUIT, handle_sigquit);
 }
 
 char *changing_tilda(void)

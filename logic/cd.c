@@ -1,92 +1,124 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cd.c                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aahri <aahri@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/05/25 15:56:10 by aahri             #+#    #+#             */
+/*   Updated: 2021/05/25 20:52:34 by aahri            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
+#include <errno.h>
+#include <string.h>
 
-int     count_smbls(char *adr)
+int	close_fd_dir(int fd, DIR *dir)
 {
-    int len;
-    int counter;
-
-    counter = 0;
-    len = 0;
-    while (adr[len] && counter < 3)
-    {
-        if (adr[len] == '/')
-            counter++;
-        len++;
-    }
-    if (adr[len - 1] == '/')
-        len--;
-    return (len);
+	close(fd);
+	if (dir)
+		closedir(dir);
+	return (1);
 }
 
-void    making_tilda(char **tilda_adr, char *adr, int len)
+int	dir_or_file_or_not(char **cmd)
 {
-    *tilda_adr = (char *)malloc(sizeof(char) * (len + 1));
-    (*tilda_adr)[len] = '\0';
-    while (len--)
-        (*tilda_adr)[len] = adr[len];
+	DIR		*dir;
+	int		fd;
+
+	if (cmd[1] && cmd[1][0] != '\0' &&
+			!(!ft_strncmp(cmd[1], "~", 1) && ft_strlen(cmd[1]) == 1))
+	{
+		fd = open(cmd[1], O_RDONLY);
+		dir = opendir(cmd[1]);
+		if (fd != -1 && !dir)
+		{
+			output_mistake_cd("minishell: cd: ", cmd[1], ": Not a directory\n");
+			return (close_fd_dir(fd, dir));
+		}
+		else if (fd == -1 && !dir)
+		{
+			output_mistake_cd("minishell: cd: ",
+				cmd[1], ": No such file or directory\n");
+			return (close_fd_dir(fd, dir));
+		}
+		else if (dir)
+			chdir(cmd[1]);
+		close_fd_dir(fd, dir);
+	}
+	return (0);
 }
 
-char    *get_tilda()
+int	has_tilda(char **cmd, int ret, t_env *envi)
 {
-    char *adr;
-    char *tilda_adr;
-    int len;
+	char	*home;
 
-    adr = getcwd(NULL, 0);
-    len = count_smbls(adr);
-    making_tilda(&tilda_adr, adr, len);
-    free(adr);
-    return (tilda_adr);
+	if (cmd[1] && !ft_strncmp(cmd[1], "~", 1)
+		&& ft_strlen(cmd[1]) == 1)
+	{
+		while (envi && (ft_strncmp("HOME=", envi->str, 5)))
+			envi = envi->next;
+		home = getenv("HOME");
+		if (!envi || (!ft_strncmp(home, &envi->str[5], ft_strlen(home))
+				&& ft_strlen(home) == ft_strlen(&envi->str[5])))
+		{
+			chdir(getenv("HOME"));
+			return (0);
+		}
+		else
+		{
+			ft_putstr_fd("minishell: cd: ", 2);
+			ft_putstr_fd(cmd[1], 2);
+			ft_putstr_fd(": No such file or directory\n", 2);
+			return (1);
+		}
+	}
+	return (ret);
 }
 
-int    cd(t_env *envi, char **cmd)
+int	non_arg(char **cmd, int ret, t_env *envi)
 {
-    int     answer;
-    char    *cmd_exp[3];
-    char    *tmp_getcwd;
-    t_env   *ptr;
-    int     ret;
-    char *adr;
+	char	*mass[3];
 
-    ret = 0;
-    ptr = envi;
-    answer = 0;
-    cmd_exp[0] = "export";
-    cmd_exp[2] = NULL;
-    if (!ft_strncmp("cd", cmd[0], 2) && ft_strlen(cmd[0]) == 2)
-    {
-        if (cmd[1] && (!ft_strncmp("~", cmd[1], 1) && ft_strlen(cmd[1]) == 1))
-        {
-            adr = get_tilda();
-            answer = chdir(adr);
-            free(adr);
-        }
-        else if (!cmd[1])
-        {
-            while (envi && ft_strncmp("HOME=", envi->str, 5))
-                envi = envi->next;
-            if (envi)
-                answer = chdir(&envi->str[5]);
-            if (!envi)
-            {
-                ft_putstr_fd("bash: cd: HOME not set\n", 1);
-                ret = 1;
-            }
-        }
-        else if (cmd[1])
-            answer = chdir(cmd[1]);
-        if (answer)
-        {
-            ft_putstr_fd("bash: cd: ", 1);
-            ft_putstr_fd(cmd[1], 1);
-            ft_putstr_fd(": No such file or directory\n", 1);
-            ret = 1;
-        }
-        tmp_getcwd = getcwd(NULL, 0);
-        cmd_exp[1] = ft_strjoin("PWD=", tmp_getcwd);
-        export(ptr, cmd_exp);
-        free(tmp_getcwd);
-        free(cmd_exp[1]);
-    }
-    return(ret);
+	mass[0] = "cd";
+	mass[2] = NULL;
+	if (!cmd[1])
+	{
+		while (envi && ft_strncmp(envi->str, "HOME=", 5))
+			envi = envi->next;
+		if (envi)
+		{
+			mass[1] = &envi->str[5];
+			return (dir_or_file_or_not(mass));
+		}
+		else
+		{
+			ft_putstr_fd("minishell: cd: HOME not set\n", 2);
+			return (1);
+		}
+	}
+	return (ret);
+}
+
+int	cd(t_env *envi, char **cmd)
+{
+	int		ret;
+	char	*cmd_exp[3];
+	char	*tmp_getcwd;
+	t_env	*ptr;
+
+	ptr = envi;
+	cmd_exp[0] = "export";
+	cmd_exp[2] = NULL;
+	ret = 0;
+	ret = dir_or_file_or_not(cmd);
+	ret = has_tilda(cmd, ret, envi);
+	ret = non_arg(cmd, ret, envi);
+	tmp_getcwd = getcwd(NULL, 0);
+	cmd_exp[1] = ft_strjoin("PWD=", tmp_getcwd);
+	export(ptr, cmd_exp);
+	free(tmp_getcwd);
+	free(cmd_exp[1]);
+	return (ret);
 }

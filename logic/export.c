@@ -1,149 +1,116 @@
 #include "../minishell.h"
 
-int     info_mistake(char *cmd)
+int	valid_arg(char *cmd)
 {
-    ft_putstr_fd("minishell: export: `", 1);
-    ft_putstr_fd(cmd, 1);
-    ft_putstr_fd("': not a valid identifier\n", 1);
-    return (0);
+	int	i;
+
+	i = 0;
+	if (cmd[i] != '_' && !ft_isalpha (cmd[i]))
+		return (info_mistake(cmd));
+	while (cmd[i] && cmd[i] != '=')
+	{
+		if (cmd[i] != '_' && !ft_isalpha(cmd[i])
+			&& !ft_isdigit(cmd[i]) && cmd[i] != '=')
+			return (info_mistake(cmd));
+		i++;
+	}
+	return (1);
 }
 
-int    valid_arg(char *cmd)
+char	*left_part(char *arr)
 {
-    int i;
+	char	*str;
+	int		len;
 
-    i = 0;
-    if (cmd[i] != '_' && !ft_isalpha(cmd[i]))
-        return(info_mistake(cmd));
-    while (cmd[i] && cmd[i] != '=')
-    {
-        if (cmd[i] != '_' && !ft_isalpha(cmd[i]) && !ft_isdigit(cmd[i]) && cmd[i] != '=')
-            return (info_mistake(cmd));
-        i++;
-    }
-    return (1);
+	len = 0;
+	while (arr[len] && arr[len] != '=')
+		len++;
+	str = (char *)malloc(sizeof(char) * (len + 1));
+	str[len] = 0;
+	len--;
+	while (len >= 0)
+	{
+		str[len] = arr[len];
+		len--;
+	}
+	return (str);
 }
 
-char    *left_part(char *arr)
+int	cmp_unit_env(char **cmd, t_env *envi, char *left_cmd, int ind)
 {
-    char *str;
-    int len;
+	char	*left_envi;
+	char	*tmp;
+	t_env	*time;
 
-    len = 0;
-    while (arr[len] && arr[len] != '=')
-        len++;
-    str = (char *)malloc(sizeof(char) * (len + 1));
-    str[len] = 0;
-    len--;
-    while (len >= 0)
-    {
-        str[len] = arr[len];
-        len--;
-    }
-    return (str);
+	time = envi;
+	while (envi)
+	{
+		left_envi = left_part(envi->str);
+		if (!ft_strncmp(left_cmd, left_envi, ft_strlen(left_cmd))
+			&& ft_strlen(left_cmd) == ft_strlen(left_envi))
+		{
+			if (has_equal(cmd[ind]))
+			{
+				tmp = envi->str;
+				envi->str = ft_strdup(cmd[ind]);
+				free(tmp);
+			}
+			free(left_envi);
+			return (0);
+		}
+		free(left_envi);
+		envi = envi->next;
+	}
+	return (1);
 }
 
-int    cmp_unit_env(char **cmd, t_env *envi, char *left_cmd)
+int	check_valid_export(char **cmd, t_env *envi)
 {
-    char *left_envi;
-    char *tmp;
-    t_env *time;
-    int ind;
+	char	*left_cmd;
+	int		ind;
+	int		ret;
 
-    ind = 0;
-    time = envi;
-    // printf("\n\n\n\n\n\nRuslan   \n\n\n\n\n\n");
-    while (envi)
-    {
-        left_envi = left_part(envi->str);
-        if (!ft_strncmp(left_cmd, left_envi, ft_strlen(left_cmd)) && ft_strlen(left_cmd) == ft_strlen(left_envi))
-        {   
-            if (has_equal(cmd[ind]))
-            {
-                tmp = envi->str;
-                envi->str = ft_strdup(cmd[ind]);
-                free(tmp);
-            }
-            free(left_envi);
-            return (0);
-        }
-        free(left_envi);
-        envi = envi->next;
-    }
-    return (1);
+	ret = 0;
+	ind = 0;
+	while (cmd[ind])
+	{
+		if (valid_arg(cmd[ind]))
+		{
+			left_cmd = left_part(cmd[ind]);
+			if (cmp_unit_env(&cmd[ind], envi, left_cmd, 0))
+				ft_lstadd_back(&envi, ft_lstnew(cmd[ind]));
+			free(left_cmd);
+		}
+		else
+			ret = 1;
+		ind++;
+	}
+	return (ret);
 }
 
-int    check_valid_export(char **cmd, t_env *envi)
+int	export(t_env *envi, char **cmd)
 {
-    char *left_cmd;
-    int ind;
-    int ret;
+	char	**split_strs;
+	int		ret;
+	t_env	*envi_dup;
+	int		exc_sign;
 
-    ret = 0;
-    ind = 0;
-    while (cmd[ind])
-    {
-        if (valid_arg(cmd[ind]))
-        {
-            left_cmd = left_part(cmd[ind]);
-            if (cmp_unit_env(&cmd[ind], envi, left_cmd))
-                ft_lstadd_back(&envi, ft_lstnew(cmd[ind]));
-            free(left_cmd);
-        }
-        else
-            ret = 1;
-        ind++;
-    }
-    return (ret);
-}
-
-void    lstdup(t_env **envi_dup, t_env *envi)
-{
-    t_env *lst;
-    while (envi)
-    {
-        lst = ft_lstnew(envi->str);
-        ft_lstadd_back(envi_dup, lst);
-        envi = envi->next;    
-    }
-}
-
-void    delete_lst(t_env *envi_dup)
-{
-    t_env *tmp;
-
-    while (envi_dup)
-    {
-        tmp = envi_dup;
-        envi_dup = envi_dup->next;
-        free(tmp->str);      
-        free(tmp);
-    }
-}
-
-int         export(t_env *envi, char **cmd)
-{
-    char    **split_strs;
-    int     ret;
-    t_env   *envi_dup;
-    int     exc_sign;
-
-    split_strs = NULL;
-    ret = 0;
-    exc_sign = 1;
-    envi_dup = NULL;
-    if (cmd && cmd[1])
-        exc_sign = has_exclamation_sign(&cmd[1]);
-    if (cmd && cmd[1] == NULL)
-    {
-        lstdup(&envi_dup, envi);
-        sorting_env(envi_dup); //сортировать его
-        output_sorted_env(envi_dup, split_strs); //сортировать этот лист
-        delete_lst(envi_dup);
-    }
-    else if (cmd && cmd[1] && exc_sign)
-        return (check_valid_export(&cmd[1], envi));
-    if (!exc_sign)
-        ft_putstr_fd("\n", 1);
-    return (0);
+	split_strs = NULL;
+	ret = 0;
+	exc_sign = 1;
+	envi_dup = NULL;
+	if (cmd && cmd[1])
+		exc_sign = has_exclamation_sign(&cmd[1]);
+	if (cmd && cmd[1] == NULL)
+	{
+		lstdup(&envi_dup, envi);
+		sorting_env(envi_dup);
+		output_sorted_env(envi_dup, split_strs);
+		delete_lst(envi_dup);
+	}
+	else if (cmd && cmd[1] && exc_sign)
+		return (check_valid_export(&cmd[1], envi));
+	if (!exc_sign)
+		ft_putstr_fd("\n", 1);
+	return (0);
 }

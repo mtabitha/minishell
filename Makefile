@@ -31,7 +31,10 @@ LOGIC_SRCS = built_in.c\
             export_one_arg.c\
             unset.c\
             ft_putnbr.c\
-			cd.c
+			cd.c\
+			utils_cd.c\
+			delete_lst.c\
+			lstdup.c
 
 EXEC_SRCS = init.c \
 			redir_pipe.c \

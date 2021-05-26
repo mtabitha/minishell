@@ -1,28 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstadd_back.c                                   :+:      :+:    :+:   */
+/*   lstdup.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aahri <aahri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/25 21:44:06 by aahri             #+#    #+#             */
-/*   Updated: 2021/05/25 21:44:07 by aahri            ###   ########.fr       */
+/*   Created: 2021/05/25 21:07:41 by aahri             #+#    #+#             */
+/*   Updated: 2021/05/25 21:46:23 by aahri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	ft_lstadd_back(t_env **lst, t_env *new)
+void	lstdup(t_env **envi_dup, t_env *envi)
 {
-	t_env	*ptr;
+	t_env	*lst;
 
-	ptr = *lst;
-	if (*lst == NULL)
+	while (envi)
 	{
-		*lst = new;
-		return ;
+		lst = ft_lstnew (envi->str);
+		ft_lstadd_back (envi_dup, lst);
+		envi = envi->next;
 	}
-	while (ptr->next)
-		ptr = ptr->next;
-	ptr->next = new;
 }

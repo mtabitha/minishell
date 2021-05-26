@@ -6,7 +6,7 @@
 /*   By: aahri <aahri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/24 09:19:54 by mtabitha          #+#    #+#             */
-/*   Updated: 2021/05/17 18:11:36 by aahri            ###   ########.fr       */
+/*   Updated: 2021/05/26 17:27:06 by aahri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,11 +198,16 @@ void        copy_back(t_env *dst, t_env *src, int len_args_unit);
 int         has_equal(char *str);
 void        sorting_env(t_env *envi);
 void        output_sorted_env(t_env *envi, char **split_strs);
-int         unset(t_env *envi, char **cmd);
+int         unset(t_env *envi, char **cmd, int ind);
 char        *left_part(char *arr);
 int         cd(t_env *envi, char **cmd);
 int         valid_arg(char *cmd);
 int         has_exclamation_sign(char **cmd);
 int     	count_smbls(char *adr);
-char 		*changing_tilda(void);
+char		*changing_tilda(void);
+int			arg_str(char **cmd);
+void		output_mistake_cd(char *str1, char *str2, char *str3);
+int     	info_mistake(char *cmd);
+void		delete_lst(t_env *envi_dup);
+void		lstdup(t_env **envi_dup, t_env *envi);
 #endif

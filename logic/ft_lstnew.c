@@ -1,6 +1,6 @@
 #include "../minishell.h"
 
-t_env		*ft_lstnew(void *content)
+t_env	*ft_lstnew(void *content)
 {
 	t_env	*r;
 

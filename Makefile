@@ -60,10 +60,12 @@ TERM_OBJS =	$(addprefix $(TERM_P), $(TERM_SRCS))
 LOGIC_OBJS = $(addprefix $(LOGIC_P), $(LOGIC_SRCS))
 EXEC_OBJS = $(addprefix $(EXEC_P), $(EXEC_SRCS))
 
-all : $(NAME)
+all : make_libft $(NAME)
+
+make_libft:
+		make -C libft
 
 $(NAME) : $(OBJS)
-		make -C libft
 		$(CC) $(CFLAGS) -o $(NAME) $(OBJS) libft/libft.a -ltermcap
 
 %.o: %.c $(INC)

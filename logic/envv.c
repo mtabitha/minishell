@@ -85,8 +85,8 @@ int	env(t_env *envi, char **unit)
 	ret = 0;
 	if (unit[1] || !got_file_from_home(envi, 0, -1, NULL))
 	{
-		ft_putstr_fd("minishell: env: ", 1);
-		ft_putstr_fd(": No such file or directory\n", 1);
+		ft_putstr_fd("minishell: env: ", 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
 		return (127);
 	}
 	while (envi)

@@ -60,9 +60,9 @@ int	has_exclamation_sign(char **cmd)
 		exc_sign = ft_strchr(cmd[ind], '!');
 		if (exc_sign != NULL && exc_sign[0] == '!' && exc_sign[1])
 		{
-			ft_putstr_fd("bash: ", 1);
-			ft_putstr_fd(exc_sign, 1);
-			ft_putstr_fd(": event not found", 1);
+			ft_putstr_fd("minishell: ", 2);
+			ft_putstr_fd(exc_sign, 2);
+			ft_putstr_fd(": event not found", 2);
 			return (0);
 		}
 		ind++;

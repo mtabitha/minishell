@@ -51,7 +51,7 @@ int	pipe_work(t_shell *shell)
 	{
 		init_ch(&shell->ch);
 		shell->main_proc = 0;
-		sig.main_proc = 0;
+		g_sig.main_proc = 0;
 		close(fd[1]);
 		shell->pipein = fd[0];
 		dup2(fd[0], 0);

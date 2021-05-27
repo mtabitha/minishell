@@ -26,12 +26,12 @@ int					ft_atoi(const char *str);
 size_t				ft_strlen(const char *s);
 size_t				ft_strlcpy(char *dst, const char *src, size_t dstsize);
 void				ft_putstr_fd(char *s, int fd);
-int				    get_next_line(int fd, char **line);
+int					get_next_line(int fd, char **line);
 char				*ft_strchr(const char *s, int c);
 int					ft_isalpha(int c);
 int					ft_isdigit(int c);
 char				**ft_split_str(char const *s, const char *del);
-char			    *ft_strjoin_for_gnl(char *s1, char *s2); 
-int		            ft_putchar(int c);
-int                 ft_strcmp(char *str1, char *str2);              
+char				*ft_strjoin_for_gnl(char *s1, char *s2);
+int					ft_putchar(int c);
+int					ft_strcmp(char *str1, char *str2);
 #endif

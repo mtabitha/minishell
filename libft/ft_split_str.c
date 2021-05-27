@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-static int		i_d(char c, const char *del)
+static int	i_d(char c, const char *del)
 {
 	while (*del)
 	{
@@ -23,9 +23,9 @@ static int		i_d(char c, const char *del)
 	return (0);
 }
 
-static int		ft_c(char *s, const char *del)
+static int	ft_c(char *s, const char *del)
 {
-	int			i;
+	int	i;
 
 	i = 0;
 	while (*s)
@@ -42,15 +42,15 @@ static int		ft_c(char *s, const char *del)
 	return (i);
 }
 
-static char		*ft_stralloc(char *s, const char *del)
+static char	*ft_stralloc(char *s, const char *del)
 {
-	char		*word;
-	int			i;
+	char	*word;
+	int		i;
 
 	i = 0;
 	while (s[i] && !i_d(s[i], del))
 		i++;
-	word = (char*)malloc(i + 1);
+	word = (char *)malloc(i + 1);
 	i = 0;
 	if (word)
 	{
@@ -64,15 +64,16 @@ static char		*ft_stralloc(char *s, const char *del)
 	return (word);
 }
 
-char			**ft_split_str(char const *s, const char *del)
+char	**ft_split_str(char const *s, const char *del)
 {
-	int			i;
-	char		**mass;
+	int		i;
+	char	**mass;
 
 	i = 0;
+	mass = (char **)malloc((ft_c((char *)s, del) + 1) * sizeof(char *));
 	if (!s)
 		return (NULL);
-	if ((mass = (char **)malloc((ft_c((char *)s, del) + 1) * sizeof(char *))))
+	if (mass)
 	{
 		while (*s)
 		{
@@ -80,7 +81,8 @@ char			**ft_split_str(char const *s, const char *del)
 				s++;
 			if (*s && !i_d(*s, del))
 			{
-				if (!(mass[i++] = ft_stralloc((char *)s, del)))
+				mass[i++] = ft_stralloc((char *)s, del);
+				if (!mass[i - 1])
 					return (NULL);
 				while (*s && !i_d(*s, del))
 					s++;

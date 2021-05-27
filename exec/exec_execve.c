@@ -80,8 +80,8 @@ int	exec_execve(t_shell *shell, char **argv, char **envp)
 	filename = ft_strdup(*argv);
 	if (its_minishell(filename))
 		off_signal();
-	sig.pid = fork();
-	if (!sig.pid)
+	g_sig.pid = fork();
+	if (!g_sig.pid)
 	{
 		if (!ft_strchr(filename, '/') && get_env("PATH", shell->env))
 			check_filename(filename, shell->env, argv, envp);
@@ -91,7 +91,7 @@ int	exec_execve(t_shell *shell, char **argv, char **envp)
 		exit(ret);
 	}	
 	else
-		waitpid(sig.pid, &ret, 0);
+		waitpid(g_sig.pid, &ret, 0);
 	on_signal();
 	free(filename);
 	return (WEXITSTATUS(ret));

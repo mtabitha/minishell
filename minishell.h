@@ -47,13 +47,13 @@
 # define ENTER	"\n"
 # define END_L	"\x04"
 
-typedef struct		s_env
+typedef struct s_env
 {
 	struct s_env	*next;
-	char			*str;	
-}					t_env;					
+	char			*str;
+}					t_env;
 
-typedef struct		s_unit
+typedef struct s_unit
 {
 	struct s_unit	*next;
 	struct s_unit	*prev;
@@ -62,18 +62,18 @@ typedef struct		s_unit
 	int				in_quote;
 }					t_unit;
 
-typedef struct	s_list
+typedef struct s_list
 {
 	struct s_list	*prev;
 	struct s_list	*next;
 	char			*content;
 }				t_list;
 
-typedef struct 	s_termcap
+typedef struct s_termcap
 {
 	int			pos;
 	int			max;
-	char 		buf[100];
+	char		buf[100000];
 	int			buf_len;
 	int			in_hist;
 	int			count_hist;
@@ -82,15 +82,14 @@ typedef struct 	s_termcap
 	t_list		*history;
 }				t_termcap;
 
-typedef struct		s_child
+typedef struct s_child
 {
 	pid_t			pid;
 	int				ret;
 	int				status;
 }					t_child;
 
-
-typedef struct		s_shell
+typedef struct s_shell
 {
 	int				exit;
 	int				recurs_exit;
@@ -107,11 +106,11 @@ typedef struct		s_shell
 	t_child			ch;
 	t_env			*env;
 	t_unit			*first;
-	t_termcap 		tmp;
-	struct termios 	term;
+	t_termcap		tmp;
+	struct termios	term;
 }					t_shell;
 
-typedef struct		s_sig
+typedef struct s_sig
 {
 	pid_t			pid;
 	int				flag;
@@ -122,7 +121,7 @@ typedef struct		s_sig
 	int				main_proc;
 }					t_sig;
 
-t_sig		sig;
+t_sig		g_sig;
 
 char		*get_env_val(t_env *env);
 t_env		*get_env(char *type, t_env *env);
@@ -166,7 +165,8 @@ void		handle_sigint(int ret);
 void		init_sig(void);
 void		clean_buf(char *buf);
 
-void		check_filename(char *filename, t_env *env, char **argv, char **envp);
+void		check_filename(char *filename, t_env *env,
+				char **argv, char **envp);
 char		**create_argv(t_unit *unit);
 char		**create_env_mass(t_env *env);
 
@@ -188,28 +188,28 @@ int			its_ret(char *str, int *i);
 void		off_signal(void);
 void		on_signal(void);
 
-int         built_in_cmd(char **cmd, t_env *envi);
-void        ft_lstadd_back(t_env **lst, t_env *new);
-int         echo(char **cmd);
-int         exit_cmd(char **cmd);
-int         env(t_env *envi, char **unit);
-int         pwd(char **cmd);//показать Чингизу
-t_env       *ft_lstnew(void *content);
-int         export(t_env *envi, char **cmd);
-void        copy_back(t_env *dst, t_env *src, int len_args_unit);
-int         has_equal(char *str);
-void        sorting_env(t_env *envi);
-void        output_sorted_env(t_env *envi, char **split_strs);
-int         unset(t_env *envi, char **cmd, int ind);
-char        *left_part(char *arr);
-int         cd(t_env *envi, char **cmd);
-int         valid_arg(char *cmd);
-int         has_exclamation_sign(char **cmd);
-int     	count_smbls(char *adr);
+int			built_in_cmd(char **cmd, t_env *envi);
+void		ft_lstadd_back(t_env **lst, t_env *new);
+int			echo(char **cmd);
+int			exit_cmd(char **cmd);
+int			env(t_env *envi, char **unit);
+int			pwd(char **cmd);//показать Чингизу
+t_env		*ft_lstnew(void *content);
+int			export(t_env *envi, char **cmd);
+void		copy_back(t_env *dst, t_env *src, int len_args_unit);
+int			has_equal(char *str);
+void		sorting_env(t_env *envi);
+void		output_sorted_env(t_env *envi, char **split_strs);
+int			unset(t_env *envi, char **cmd, int ind);
+char		*left_part(char *arr);
+int			cd(t_env *envi, char **cmd);
+int			valid_arg(char *cmd);
+int			has_exclamation_sign(char **cmd);
+int			count_smbls(char *adr);
 char		*changing_tilda(void);
 int			arg_str(char **cmd);
 void		output_mistake_cd(char *str1, char *str2, char *str3);
-int     	info_mistake(char *cmd);
+int			info_mistake(char *cmd);
 void		delete_lst(t_env *envi_dup);
 void		lstdup(t_env **envi_dup, t_env *envi);
 void		memory_allocated(char *memory);

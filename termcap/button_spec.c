@@ -97,10 +97,10 @@ void	button_read(t_termcap *tmp)
 	i = 0;
 	clean_buf(tmp->buf);
 	tmp->buf_len = read(0, tmp->buf, 100);
-	if (sig.flag)
+	if (g_sig.flag)
 	{
 		clean_buf(tmp->new->content);
-		sig.flag = 0;
+		g_sig.flag = 0;
 		tmp->pos = 0;
 		tmp->history = NULL;
 		tmp->in_hist = 0;

@@ -44,10 +44,10 @@ void	exec_cmd(t_shell *shell, t_unit *unit)
 	else
 		shell->ret = exec_execve(shell, argv, envp);
 	shell->last_ret = shell->ret;
-	if (sig.ch_flagint || sig.ch_flagquit)
+	if (g_sig.ch_flagint || g_sig.ch_flagquit)
 	{
-		shell->ret = sig.exit;
-		shell->last_ret = sig.exit;
+		shell->ret = g_sig.exit;
+		shell->last_ret = g_sig.exit;
 	}
 	init_sig();
 	ft_free(argv);

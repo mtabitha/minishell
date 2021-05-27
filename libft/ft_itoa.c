@@ -30,7 +30,7 @@ static int	ft_intcount(int n)
 	return (i);
 }
 
-char		*ft_itoa(int n)
+char	*ft_itoa(int n)
 {
 	long	i;
 	int		len;
@@ -38,14 +38,12 @@ char		*ft_itoa(int n)
 
 	i = n;
 	len = ft_intcount(i);
-	if (!(ptr = (char *)malloc((len + 1) * sizeof(char))))
+	ptr = (char *)malloc((len + 1) * sizeof(char));
+	if (!ptr)
 		return (NULL);
 	ptr[len--] = '\0';
 	if (!i)
-	{
 		ptr[0] = '0';
-		return (ptr);
-	}
 	if (i < 0)
 	{
 		ptr[0] = '-';

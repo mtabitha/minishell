@@ -83,8 +83,8 @@ t_unit	*parse(t_shell *shell)
 	char	*line;
 
 	line = fd_or_std(shell);
-	if (sig.flagint)
-		shell->last_ret = sig.exit;
+	if (g_sig.flagint)
+		shell->last_ret = g_sig.exit;
 	if (quote_err(line) || !line)
 		return (NULL);
 	line = space_line(line);

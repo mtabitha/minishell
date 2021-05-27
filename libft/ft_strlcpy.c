@@ -19,8 +19,8 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t len)
 
 	if (!dst || !src)
 		return (0);
-	ptr_dst = (unsigned char*)dst;
-	ptr_src = (unsigned char*)src;
+	ptr_dst = (unsigned char *)dst;
+	ptr_src = (unsigned char *)src;
 	if (len)
 	{
 		len--;

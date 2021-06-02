@@ -60,6 +60,7 @@ typedef struct s_unit
 	int				type;
 	char			*str;
 	int				in_quote;
+	int				flag;
 }					t_unit;
 
 typedef struct s_list
@@ -73,7 +74,7 @@ typedef struct s_termcap
 {
 	int			pos;
 	int			max;
-	char		buf[100000];
+	char		buf[5];
 	int			buf_len;
 	int			in_hist;
 	int			count_hist;

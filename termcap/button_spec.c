@@ -96,7 +96,7 @@ void	button_read(t_termcap *tmp)
 
 	i = 0;
 	clean_buf(tmp->buf);
-	tmp->buf_len = read(0, tmp->buf, 100);
+	tmp->buf_len = read(0, tmp->buf, 5);
 	if (g_sig.flag)
 	{
 		clean_buf(tmp->new->content);

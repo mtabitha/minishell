@@ -81,8 +81,10 @@ char	*termcap(t_termcap *tmp)
 			button_back(tmp);
 		else if (!ft_strcmp(tmp->buf, END_L))
 			button_eof(tmp);
-		else
+		else if ((tmp->buf[0] > 31 && tmp->buf[0] < 126) && !tmp->buf[1])
 			button_insert(tmp);
+		else
+			write(1, "\a", 1);
 	}
 	return (tmp->first->content);
 }
